@@ -1,5 +1,6 @@
 ---
 title: Micro-change lane and the /microfix command
+updated: 2026-10-02
 type: workflow
 tags: [workflow, microfix]
 ---

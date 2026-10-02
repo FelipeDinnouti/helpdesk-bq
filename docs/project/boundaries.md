@@ -1,5 +1,6 @@
 ---
 title: Boundaries and scope rules
+updated: 2026-10-02
 type: project
 tags: [project, boundaries, safety]
 ---
@@ -40,6 +41,17 @@ Operative source alongside `.opencode/agents/project-manager.md`.
 
 ## Canonical references
 
-- `Apostila_Operacao_Software_Confiavel.pdf` — the assignment spec.
-  **Do NOT read until the user says so** (user instruction 2026-10-02).
+- `Apostila_Operacao_Software_Confiavel.pdf` — the assignment spec (102 pages).
+  **Read 2026-10-02.** Indexed in [[reference/spec-map]]; nobody needs to
+  reread it. The binding subset is spec-map §3.
+- [[reference/glossary]] — the naming contract. Binding on every identifier.
+- [[project/team-and-screens]] — screen assignment and per-screen deliverables.
 - `src/` + `public/` current code — the implementation baseline.
+
+## Naming
+
+Any new noun in the codebase gets an entry in [[reference/glossary]] first,
+with its banned synonyms. Existing spec vocabulary is adopted as written
+(`ticket`, `requester`, `technician`, `admin`, `owner`, `comment`, `status`,
+`priority`, `history`); the pt-BR display alias `chamado` is the single
+declared exception and never appears in an identifier.

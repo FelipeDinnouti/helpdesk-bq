@@ -1,5 +1,6 @@
 ---
 title: Verification pitfalls
+updated: 2026-10-02
 type: reference
 tags: [reference, verification, testing, quality]
 ---

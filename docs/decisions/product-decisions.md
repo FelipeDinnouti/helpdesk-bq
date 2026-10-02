@@ -1,5 +1,6 @@
 ---
 title: Product decisions
+updated: 2026-10-02
 type: decisions
 tags: [decisions, product]
 ---

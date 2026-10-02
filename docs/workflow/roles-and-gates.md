@@ -1,5 +1,6 @@
 ---
 title: Roles, approval model and verification gates
+updated: 2026-10-02
 type: workflow
 tags: [workflow, agents, gates]
 ---
@@ -22,7 +23,9 @@ Readable copy. Operative sources: `.opencode/agents/`.
   good / continue" inside an agreed plan is approval to proceed.
 - The **`code-reviewer` is the technical gate**: `PASS` / `CHANGES REQUIRED`,
   before every commit.
-- **Visual PASS is mandatory on UI batches** (grade depends on it): rendered
+- **Visual PASS is mandatory on UI batches**. This is *our* standard, not the
+  rubric's: the grading weights have no appearance line (spec-map §1), but a
+  half-finished-looking screen reads as unfinished in a live demo. Rendered
   inspection or user verdict on the exact route, recorded in the cycle ledger.
 - **Standing commit authority is granted.** Commit whenever a batch is green
   and reviewed, with a conventional message. This narrows *whether to ask*,
