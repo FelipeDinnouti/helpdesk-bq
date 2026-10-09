@@ -1,7 +1,7 @@
 # TASK-01 — helpdesk-bq
 
-Situação: **QTS lida, documentação reindexada em pt-BR. Implementação não
-começada — a aplicação ainda não roda.**
+Situação: **Implementação concluída e commitada (passos 00–12). 41 testes
+verdes. Falta: demonstrar e entregar.**
 
 Autoridade: `docs/` guarda as decisões; **este arquivo é o plano operante
 enquanto aberto.** Retrospectivas vão para o ledger do ciclo na hora, nunca se
@@ -36,31 +36,29 @@ acumulam aqui.
 - [x] Base de delegação → `docs/project/team-and-screens.md`
 - [x] `README.md` da raiz com stack, telas, comandos e estado
 
-## 3. Próximo, nesta ordem
+## 3. Próximo — os 13 passos do plano-mestre
 
-1. **Decidir G10** — `public/` vanilla (QTS) ou `frontend/` React. Decide a base
-   de toda a interface. Uma linha no registro de decisões.
-2. **`package.json` na raiz** com `dev`, `test`, `lint`, `start`, `migrate`,
-   `seed`, e `.env.example`. Sem isso nada roda.
-3. **Decidir G5** (rota de login) e acertar o mock em `public/js/login.js`.
-4. **Travar a linguagem visual** com o `ui-designer`.
-5. **Backend mínimo**: migrações, login com JWT + bcrypt e bloqueio de 10 min,
-   CRUD de chamados com validações, transição de status com histórico,
-   `/api/reports/summary`.
-6. **Seed** com os 12 chamados.
-7. **As cinco telas**, uma por lote: Login (integrar) → Novo chamado → Lista →
-   Detalhe → Dashboard.
-8. Decidir no caminho: G1 (fila), G2 (responsável), G4 (comentários),
-   G6 (exclusão), G7 (paginação), G8 (reabertura), G9 (limite da descrição).
+Plano completo em `docs/plans/00-master.md`. Cada passo tem seu arquivo em
+`docs/plans/`, sua verificação e seu aviso no Telegram. Ordem:
+
+- [x] **00** — decisões G1–G14 travadas e registradas
+- [x] **01** — fundação do backend (`package.json`, Express, `/api/health`)
+- [x] **02** — banco (migrações + seed)
+- [x] **03** — auth (`POST /api/sessions`, JWT + bcrypt, bloqueio)
+- [x] **04** — chamados (CRUD + filtros + paginação)
+- [x] **05** — status, comentários, histórico, exclusão lógica
+- [x] **06** — relatórios + admin (categorias, usuários)
+- [x] **07** — testes do backend (unit + API)
+- [x] **08** — front base + Login integrado
+- [x] **09** — Lista + Novo chamado
+- [x] **10** — Detalhe
+- [x] **11** — Dashboard + 360px + a11y
+- [x] **12** — fechamento (demo, visual, revisão, commit)
 
 ## 4. Perguntas para o grupo
 
-- **G10 é a decisão que mais trava.** Sem ela, metade do front pode ser
-  descartada. Quem decide, e até quando?
-- `app.js` e `server.js` na raiz (como a QTS mostra) ou em `src/` (como estão)?
-- `categoria` entra como tabela, campo do chamado, ou sai? Quem faz?
-- A exclusão de chamado (RF07 da apostila) entra ou sai, já que a QTS não
-  menciona?
+Nenhuma pendência de documentação — G1–G14 decididas. Se o grupo quiser rever
+qualquer decisão, o registro está em `docs/decisions/decision-log.md`.
 
 ## 5. Inegociáveis
 

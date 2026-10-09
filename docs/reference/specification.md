@@ -419,21 +419,17 @@ em `thoughts/shared/plans/2026-10-09-react-express-front.md` está marcado
 *"aguardando aprovação — NADA implementado ainda"*, mas propõe exatamente a
 divisão `backend/` + `frontend/` que a QTS não prevê.
 
-A QTS é explícita e justifica a escolha. Nada foi apagado. **Decidir:**
-
-- **(a) Seguir a QTS** — `public/` vanilla é a interface; `frontend/` serve de
-  referência visual ou é removido depois.
-- **(b) Seguir o plano React** — exige atualizar a QTS, porque a
-  documentação do projeto passa a divergir do código.
-
-Enquanto não houver decisão, **o código que vale é o de `public/`**, porque é o
-que a QTS descreve e o que roda sem build.
+**Decidida em 2026-10-09 por autoridade do usuário: opção (b), React.**
+O `frontend/` React 19 + Vite é a interface; o Express serve `frontend/dist`
+em produção e o Vite usa proxy `/api` em desenvolvimento. O `public/` vanilla
+vira referência visual e não é apagado — é trabalho de outro colaborador. A
+linha de stack da QTS (§5.1) fica superada neste ponto, com registro no
+`decision-log.md`.
 
 ### 8.2 `app.js` e `server.js` na raiz ou em `src/`?
 
-A QTS mostra na raiz; o repositório tem em `src/`. A apostila (Passo 24) e o
-plano em `thoughts/` usam `src/`. **Nenhuma das três foi alterada por esta
-documentação** — registrar aqui para o grupo escolher.
+**Decidido: `src/` fica** (realidade + apostila Passo 24 + plano existente). A
+árvore da QTS fica superada neste ponto, com registro no `decision-log.md`.
 
 ### 8.3 Rota de login
 

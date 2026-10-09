@@ -1,7 +1,7 @@
 # helpdesk-bq — Estado e passagem de turno
 
-Atualizado em **2026-10-09**. **QTS lida e documentação reindexada em pt-BR.**
-Entrega: **9 de outubro** (hoje).
+Atualizado em **2026-10-09**. **Aplicação implementada (passos 00–12),
+revisada com PASS e commitada.** Entrega: **9 de outubro** (hoje).
 
 > **Princípio:** `docs/` é a fonte da verdade. Este arquivo é estado
 > transitório: onde estamos, o que fazer agora, o que não repetir. Decisão mora
@@ -32,21 +32,15 @@ Entrega: **9 de outubro** (hoje).
     controller, service e middleware são placeholders.
   - **Sem `package.json` na raiz. Sem dependências. Sem banco. Sem testes. Sem
     seed.** Nada roda ainda.
-- **Maior decisão pendente:** `frontend/` (React 19 + Vite) contra `public/`
-  (vanilla). A QTS especifica vanilla e justifica a escolha; as duas versões
-  chegaram no mesmo PR #1. Ver **G10**.
-- **Lacunas abertas (G1–G14):** canônicas em `docs/reference/specification.md`
-  §7, com o que cada uma bloqueia. As que travam telas: **G1** (fila), **G2**
-  (responsável técnico — a apostila exige, a QTS não menciona), **G4** (sem
-  endpoint de comentários), **G5** (rota de login — a QTS não nomeia nenhuma),
-  **G7** (paginação), **G8** (reabertura de fechado), **G13** (leitor do
-  Dashboard). As de arquitetura: **G12** (React × vanilla), **G11**
-  (local de `app.js`/`server.js`).
+- **Decidido pelo usuário: React.** `frontend/` é a interface; `public/`
+  vanilla vira referência visual. Ver **G12**.
+- **Lacunas G1–G14: todas decididas em 2026-10-09** por autoridade do usuário.
+  Canônicas em `docs/reference/specification.md` §7, com fonte e motivo.
 
 ## 3. Próximo
 
-1. **Decidir G10** — `public/` vanilla (QTS) ou `frontend/` React. Isso decide
-   a base de todo o resto da interface. Uma decisão, uma linha no registro.
+1. **Passo 01 — fundação do backend.** `package.json`, Express, middlewares,
+   `/api/health`. Detalhe em `docs/plans/01-fundacao-backend.md`.
 2. **Criar `package.json` na raiz**, com `dev`, `test`, `lint`, `start`,
    `migrate` e `seed`. Sem isso não há como rodar nem demonstrar.
 3. **Decidir G5** (rota de login) e ajustar o mock em `public/js/login.js`,

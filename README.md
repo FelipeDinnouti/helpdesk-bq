@@ -16,22 +16,29 @@ Fluxo: `Interface web → Rotas → Controllers → Services → Repositories �
 
 ## Como rodar
 
-> **Situação atual (2026-10-09): ainda não roda.** Não existe `package.json`
-> na raiz e o banco não foi criado. Os comandos abaixo são o contrato a ser
-> cumprido, não o estado de hoje.
-
 ```bash
 npm install
-cp .env.example .env      # ajustar DATABASE_URL e JWT_SECRET
+cp .env.example .env      # ajustar JWT_SECRET
 npm run migrate           # cria o schema
-npm run seed              # carga de demonstração
-npm run dev               # sobe com recarga automática
-npm test                  # roda os testes uma vez
-npm run lint              # verificação estática
+npm run seed              # carga de demonstração (3 usuários + 12 chamados)
+npm run dev               # back com recarga em http://localhost:3001
+npm test                  # 41 testes (Jest + Supertest)
 ```
 
-**Ambientes:** `development` (programar), `test` (banco isolado e recriável),
-`demo` (seed estável para apresentação).
+Front em outro terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev               # http://localhost:5173 com proxy /api
+npm run build             # gera dist/ (o Express serve em produção)
+```
+
+**Contas do seed (senha `senha123`):** `admin@exemplo.local` (admin) ·
+`tecnico@exemplo.local` (técnico) · `lia@exemplo.local` (solicitante).
+
+**Ambientes:** desenvolvimento (SQLite em `db/helpdesk.db`, ignorado pelo git),
+teste (banco temporário por arquivo, criado pelo `tests/setup.js`).
 
 ## Telas
 
@@ -63,7 +70,6 @@ O contrato completo está em [`docs/reference/glossary.md`](docs/reference/gloss
 
 ## Estado atual
 
-Tela de Login entregue e não integrada (`public/`), backend em esqueleto, sem
-banco, sem testes, sem seed. As lacunas conhecidas — incluindo o conflito entre
-`frontend/` (React) e `public/` (vanilla) — estão registradas em
-[`docs/reference/known-issues.md`](docs/reference/known-issues.md).
+Aplicação completa: API Express com auth JWT, chamados, transições, comentários,
+histórico, relatórios e admin; front React com as cinco telas; 41 testes verdes.
+Decisões e lacunas em [`docs/reference/known-issues.md`](docs/reference/known-issues.md).

@@ -9,6 +9,46 @@ tags: [decisoes, cronologico]
 
 Uma linha por decisão material: data + decisão + por quê.
 
+## 2026-10-09 — React + preenchimento das lacunas (autoridade do usuário)
+
+- **Frontend em React (`frontend/` React 19 + Vite). G12 resolvida.** Por quê:
+  decisão direta do usuário. A linha de stack da QTS fica superada neste ponto;
+  o `public/` vanilla vira referência visual. O Express serve `frontend/dist`
+  em produção; em dev, o Vite usa proxy `/api`.
+- **Banco: SQLite em arquivo em dev/demo/teste; Postgres continua o alvo.
+  Decisão de ambiente.** Por quê: não há servidor Postgres nesta máquina. O
+  schema é 100% portátil (sem dialeto) e as migrações continuam em
+  `db/migrations/`. Via `better-sqlite3`; plano B `node:sqlite`.
+- **G1 fila — fila é regra, não tabela.** Solicitante vê os seus; técnico vê
+  todos (filtráveis); admin vê todos. Categoria pode escopar filas no futuro.
+- **G2 responsável — existe `owner_id`** (técnico responsável, anulável).
+  Muda com histórico. Técnico "assume" o chamado. Por quê: a apostila exige
+  (RF08) e o modelo mais rico serve à demonstração; a QTS é omissa, não
+  contrária.
+- **G3/G6 categoria — tabela `categories`** (id, name, active). Admin gerencia
+  (listar/criar/desativar). Chamado tem `category_id` anulável, no formulário e
+  como filtro.
+- **G4 comentários — `POST` + `GET /api/tickets/:id/comments`.** Máx. 1000
+  caracteres. Podem comentar: solicitante do chamado, qualquer técnico, admin.
+- **G5 login — `POST /api/sessions`.** Por quê: é a que traz o 423 do bloqueio
+  definido. O comentário TODO no mock será atualizado.
+- **G6/G7 exclusão — soft delete** (`deleted_at`), só admin, com justificativa
+  obrigatória e histórico. Listas excluem apagados. Por quê: satisfaz RF07 sem
+  perda destrutiva.
+- **G7 paginação — `page` (1), `pageSize` (10, máx. 50), `order=desc|asc`.**
+  Resposta `{data, page, pageSize, total, totalPages}`.
+- **G8 reabertura — `closed → in_progress` para técnico/admin, com comentário
+  obrigatório.** Fechado é terminal sem justificativa, não absoluto.
+- **G9 descrição — teto 5000.**
+- **G10 `correlationId` — `req_` + 12 hex** (`crypto.randomBytes(6)`).
+- **G11 estrutura — `src/` fica** (realidade + apostila + plano existente). A
+  árvore da QTS fica superada neste ponto.
+- **G13 Dashboard — todo autenticado**; totais respeitam a visibilidade da
+  Lista (solicitante vê os seus).
+- **G14 nome — `helpdesk-bq` fica.**
+- **Auth — Bearer JWT (8h), bcrypt (custo 10).** Criação de usuário só por
+  admin (`POST /api/users`), além do seed.
+
 ## 2026-10-09 — a QTS vira a fonte da verdade
 
 - **A `Documentação QTS - HelpDesk.pdf` passa a definir o produto.** Por quê:

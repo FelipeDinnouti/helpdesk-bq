@@ -43,19 +43,15 @@ código e apresentação.
 
 ## PD-03 — Stack única, front servido de `public/`
 
-**Decisão:** JavaScript/Node.js com Express no back; front em **HTML, CSS e
-JavaScript**, servidos pela própria aplicação a partir de `public/`; PostgreSQL
-com migrações em `db/migrations/`; JWT para sessão e bcrypt para senhas; Jest e
-Supertest para testes.
+**Decisão:** JavaScript/Node.js com Express no back; front em **React 19 +
+Vite** (`frontend/`), servido pelo Express em produção; SQLite em arquivo em
+dev/demo/teste com schema portátil (Postgres é o alvo); JWT para sessão e
+bcrypt para senhas; Jest e Supertest para testes.
 
-**Justificativa:** é o que a QTS especifica, com justificativa explícita —
-*"A escolha por uma única linguagem nas duas pontas simplifica a comunicação
-entre as equipes e reduz a curva de aprendizado do grupo."*
+**Justificativa:** decisão direta do usuário em 2026-10-09, superando a linha de
+stack da QTS neste ponto. O `public/` vanilla vira referência visual.
 
-**Consequência:** o `frontend/` React+Vite diverge. Ver
-[[reference/specification]] §8.1.
-
-**Data:** 2026-10-09 · **Situação:** vigente, com a pendência da G10
+**Data:** 2026-10-09 · **Situação:** vigente
 
 ---
 
@@ -119,25 +115,6 @@ discussão recorrente.
 
 ## Em aberto — precisa de decisão do grupo
 
-Nenhuma destas foi aplicada. Detalhes em [[reference/specification]] §7 e
-§8.
-
-| Lacuna | Decisão que falta |
-|---|---|
-| **G1** fila / queue | O que é a fila do técnico? Tabela, coluna, ou é a categoria? |
-| **G2** responsável técnico | A apostila exige histórico de responsável (RF08); a QTS não menciona. Existe coluna `owner_id`? |
-| **G3** categoria | Entidade nova da QTS: entra como tabela, campo do chamado, ou sai? |
-| **G4** endpoint de comentários | A tela Detalhe exige comentar e há migração, mas nenhuma rota foi especificada. |
-| **G5** rota de login | A QTS não nomeia nenhuma. `POST /api/sessions` (apostila) ou `POST /api/auth/login` (plano e comentário no mock)? |
-| **G6** exclusão | A apostila exige (RF07); a QTS não menciona. E a apostila em si pergunta se é física, lógica ou arquivamento auditável. Entra ou sai, e de que tipo? |
-| **G7** paginação e ordenação | Tamanho de página, ordem padrão e desempate nunca foram definidos. |
-| **G8** reabertura de fechado | Quem reabre um chamado **fechado**, e em que prazo? A QTS só autoriza o retorno de Resolvido para Em atendimento. |
-| **G9** limite da descrição | RF04 só diz "mínimo 30". O exemplo de Zod da apostila usa `max(5000)` sem origem declarada. |
-| **G10** `correlationId` | `req_7f31…` (exemplos) ou UUID cru (código)? |
-| **G11** estrutura | `app.js` e `server.js` na raiz (QTS) ou em `src/` (apostila e repositório)? |
-| **G12** `frontend/` React | A QTS vence e o React vira referência visual, ou a documentação é atualizada para o React? |
-| **G13** leitor do Dashboard | A apostila dá os totais à *gestora*; a QTS não diz quem lê. São os três perfis? |
-| **G14** nome do repositório | `HELPDESK-BQ-MAIN/` (QTS) ou `helpdesk-bq` (repositório)? |
-
-A lista canônica, com a fonte dos dois lados e o que cada uma bloqueia, está em
-[[reference/specification]] §7.
+Nenhuma pendência. Todas as lacunas G1–G14 foram decididas em 2026-10-09 por
+autoridade do usuário; o detalhe com fonte e motivo está no registro acima e a
+lista canônica em [[reference/specification]] §7.

@@ -1,21 +1,24 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../auth.jsx";
+import { ApiError } from "../lib/api.js";
 import "../styles/login.css";
 
 function isEmailValid(value) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-
 // Tela de login — visual fiel ao mock do print 1.
-// MOCK temporário no submit só para demonstração do fluxo.
+// Tela de login integrada à API real (POST /api/sessions).
 export default function Login() {
-  const [email, setEmail] = useState("aluno@ete");
+  const { login } = useAuth();
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("lia@exemplo.local");
   const [password, setPassword] = useState("");
   const [touched, setTouched] = useState({ email: false, password: false });
   const [stepsDone, setStepsDone] = useState({
     // Estado inicial replica o print: e-mail preenchido = etapa 1 concluída
-    credentials: isEmailValid("aluno@ete"),
+    credentials: isEmailValid("lia@exemplo.local"),
     session: false,
     dashboard: false,
   });
@@ -47,28 +50,20 @@ export default function Login() {
 
     setSubmitting(true);
     try {
-      // TODO(back): trocar o mock abaixo pelo fetch real. Contrato sugerido:
-      // const res = await fetch("/api/auth/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify({ email: email.trim(), password }),
-      // });
-      // if (!res.ok) throw new Error(res.status === 401 ? "Credenciais inválidas." : "Falha no login.");
-      // const data = await res.json(); // ex: { token, user }
-      // setStepsDone({ credentials: true, session: true, dashboard: true });
-      // window.location.href = "/dashboard";
-      // return;
-
-      // --- MOCK temporário só para demonstração do fluxo (remover quando ligar o back) ---
-      await wait(500);
       setStepsDone((s) => ({ ...s, credentials: true }));
-      await wait(500);
-      setStepsDone((s) => ({ ...s, session: true }));
-      await wait(500);
-      setStepsDone((s) => ({ ...s, dashboard: true }));
-      // --- fim do MOCK ---
+      await login(email.trim(), password);
+      setStepsDone((s) => ({ ...s, session: true, dashboard: true }));
+      navigate("/lista", { replace: true });
+      return;
+
     } catch (err) {
-      setFeedback(err.message || "Não foi possível entrar. Tente de novo.");
+      if (err instanceof ApiError && err.code === "ACCOUNT_LOCKED") {
+        setFeedback(
+          `Conta bloqueada após tentativas inválidas. Tente de novo em alguns minutos.${err.correlationId ? ` Código de suporte: ${err.correlationId}.` : ""}`,
+        );
+      } else {
+        setFeedback(err.message || "Não foi possível entrar. Tente de novo.");
+      }
     } finally {
       setSubmitting(false);
     }
@@ -85,7 +80,6 @@ export default function Login() {
       <section className="login-card" aria-labelledby="login-title">
         <header className="login-card__header">
           <span className="login-card__brand">HelpDesk BQ</span>
-          {/* TODO(back): ajustar este texto auxiliar / domínio quando o back definir */}
           <span className="login-card__hint">acesso interno</span>
         </header>
 
