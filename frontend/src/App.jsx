@@ -1,7 +1,3 @@
-import Login from './pages/Login.jsx'
-
-function App() {
-  return <Login />
-}
-
+import NovoChamado from './pages/NovoChamado.jsx'
+function App() { return <NovoChamado /> }
 export default App
