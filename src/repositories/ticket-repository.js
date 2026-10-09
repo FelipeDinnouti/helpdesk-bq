@@ -69,9 +69,35 @@ function updateFields(id, fields) {
   return findById(id, true);
 }
 
+function setStatus(id, status) {
+  const at = new Date().toISOString();
+  db.prepare('UPDATE tickets SET status = ?, updated_at = ? WHERE id = ?').run(status, at, id);
+}
+
+function summaryCounts({ status, priority, category_id, since, until, scopeUser, scopeRole }) {
+  const where = ['t.deleted_at IS NULL'];
+  const params = [];
+  if (scopeRole === 'requester') {
+    where.push('t.requester_id = ?');
+    params.push(scopeUser);
+  }
+  if (status) { where.push('t.status = ?'); params.push(status); }
+  if (priority) { where.push('t.priority = ?'); params.push(priority); }
+  if (category_id) { where.push('t.category_id = ?'); params.push(category_id); }
+  if (since) { where.push('t.created_at >= ?'); params.push(since); }
+  if (until) { where.push('t.created_at <= ?'); params.push(until); }
+  return db
+    .prepare(`SELECT status, priority, COUNT(*) AS n FROM tickets t WHERE ${where.join(' AND ')} GROUP BY status, priority`)
+    .all(...params);
+}
+
+function transaction(fn) {
+  return db.transaction(fn);
+}
+
 function softDelete(id) {
   const at = new Date().toISOString();
   db.prepare('UPDATE tickets SET deleted_at = ?, updated_at = ? WHERE id = ?').run(at, at, id);
 }
 
-module.exports = { create, findById, list, updateFields, softDelete };
+module.exports = { create, findById, list, updateFields, setStatus, summaryCounts, transaction, softDelete };

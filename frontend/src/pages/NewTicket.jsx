@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api, ApiError } from '../lib/api.js';
-import { Loading } from '../components/shell.jsx';
-import { PRIORITY_LABEL } from '../components/shell.jsx';
+import { Loading, PRIORITY_LABEL } from '../components/shell.jsx';
 
 export default function NewTicket() {
   const navigate = useNavigate();

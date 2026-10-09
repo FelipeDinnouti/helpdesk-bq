@@ -1,5 +1,5 @@
-const db = require('../../db/db');
 const { httpError } = require('../middlewares/error-handler');
+const categories = require('../repositories/category-repository');
 const { ticketFields, PRIORITIES, STATUSES } = require('../lib/validate');
 const tickets = require('../repositories/ticket-repository');
 const users = require('../repositories/user-repository');
@@ -13,8 +13,7 @@ function validationError(details) {
 
 function categoryOrThrow(category_id) {
   if (category_id === undefined || category_id === null) return null;
-  const row = db.prepare('SELECT id FROM categories WHERE id = ? AND active = 1').get(category_id);
-  if (!row) {
+  if (!categories.findActiveById(category_id)) {
     throw validationError([{ field: 'category_id', message: 'Categoria inválida.' }]);
   }
   return category_id;

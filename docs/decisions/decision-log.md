@@ -48,6 +48,10 @@ Uma linha por decisão material: data + decisão + por quê.
 - **G14 nome — `helpdesk-bq` fica.**
 - **Auth — Bearer JWT (8h), bcrypt (custo 10).** Criação de usuário só por
   admin (`POST /api/users`), além do seed.
+- **Sem reativação de usuário.** `POST /api/users` dá 409 em e-mail já usado,
+  mesmo inativo, e não há caminho de volta. Por quê: não existe desativação de
+  usuário em nenhum fluxo (só categoria tem ativar/desativar); reativação seria
+  código sem chamador.
 
 ## 2026-10-09 — a QTS vira a fonte da verdade
 

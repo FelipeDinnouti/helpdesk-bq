@@ -11,8 +11,8 @@ acumulam aqui.
 
 - A `Documentação QTS - HelpDesk.pdf` define o produto. A apostila complementa e
   nunca contradiz; onde as duas divergem, vira lacuna, não requisito.
-- Stack: Node.js + Express, **front HTML/CSS/JS de `public/`**, PostgreSQL,
-  JWT + bcrypt, Jest + Supertest.
+- Stack: Node.js + Express, **front React 19 + Vite (`frontend/`)**, SQLite em
+  arquivo com schema portátil (Postgres é o alvo), JWT + bcrypt, Jest + Supertest.
 - `ticket` é o substantivo canônico; pt-BR **chamado** só em string visível.
 - Cinco telas, cinco colaboradores, dirigidos como *"colaborador responsável por
   &lt;Tela&gt;"*, nunca pelo nome.
@@ -71,5 +71,5 @@ qualquer decisão, o registro está em `docs/decisions/decision-log.md`.
 - Substantivo novo só entra no código depois de entrar no glossário.
 - **Mock não é integração.** O mock de Login não vale como prova de que o
   login funciona.
-- **Não tocar em `frontend/`, `thoughts/` ou no Login de `public/`** sem o
-  grupo decidir — é trabalho de outra pessoa.
+- **Não apagar `public/` vanilla nem `thoughts/`** — são trabalho de outro
+  colaborador e viraram referência (G12 registrada).

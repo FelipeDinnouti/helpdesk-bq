@@ -25,13 +25,15 @@ revisada com PASS e commitada.** Entrega: **9 de outubro** (hoje).
 - **Equipe:** cinco colaboradores, uma tela cada, dirigidos como
   *"colaborador responsável por &lt;Tela&gt;"*, nunca pelo nome.
   `docs/project/team-and-screens.md`.
-- **Aplicação:**
-  - Front: **tela de Login entregue** em `public/login.html` + `css/login.css` +
-    `js/login.js`, com mock do fluxo e ganchos `TODO(back)`. **Não integrada.**
-  - Back: esqueleto. `src/app.js` e `src/server.js` são comentários; rotas,
-    controller, service e middleware são placeholders.
-  - **Sem `package.json` na raiz. Sem dependências. Sem banco. Sem testes. Sem
-    seed.** Nada roda ainda.
+- **Aplicação: pronta e verde (commit `b6cf4b5`).**
+  - Back: Express com `POST /api/sessions` (JWT + bcrypt + bloqueio 3/5min→10min),
+    CRUD de chamados com filtros e paginação, transições com histórico,
+    comentários, relatórios e admin. SQLite em arquivo (schema portátil);
+    migrações + seed (3 usuários, 12 chamados).
+  - Front: React com as 5 telas integradas à API real; E2E por Chromium (login,
+    filtros, criar, detalhe, dashboard, 360px, teclado), sem erro de JS.
+  - Testes: 41 verdes (Jest + Supertest), banco isolado por arquivo, mutation
+    check da transição registrado no ledger.
 - **Decidido pelo usuário: React.** `frontend/` é a interface; `public/`
   vanilla vira referência visual. Ver **G12**.
 - **Lacunas G1–G14: todas decididas em 2026-10-09** por autoridade do usuário.
@@ -39,20 +41,12 @@ revisada com PASS e commitada.** Entrega: **9 de outubro** (hoje).
 
 ## 3. Próximo
 
-1. **Passo 01 — fundação do backend.** `package.json`, Express, middlewares,
-   `/api/health`. Detalhe em `docs/plans/01-fundacao-backend.md`.
-2. **Criar `package.json` na raiz**, com `dev`, `test`, `lint`, `start`,
-   `migrate` e `seed`. Sem isso não há como rodar nem demonstrar.
-3. **Decidir G5** (rota de login) e ajustar o mock em `public/js/login.js`,
-   com um comentário `TODO(back)` que sugere `/api/auth/login`.
-4. **Travar a linguagem visual** com o `ui-designer` antes da segunda tela.
-5. **Levantar o backend**: migrações (`users`, `tickets`, `comments`,
-   `ticket_history`, `login_attempts`, `categories`), login com JWT + bcrypt e
-   bloqueio, CRUD de chamados com as validações, transição de status, histórico
-   e `/api/reports/summary`.
-6. **Seed** com os 12 chamados da apostila, para a demonstração não abrir
-   vazia.
-7. **Resolver G1, G2, G4, G7, G8** antes de construir Lista, Detalhe e Dashboard.
+1. **Dívidas da revisão** (4, pequenas): SQL em services → repositories; 400 do
+   login com `details[]`; nota sobre reativação de usuário; import duplo no
+   `NewTicket.jsx`. Plano em `docs/plans/13-demo.md`.
+2. **Verificação de sala limpa**: `rm db + migrate + seed + dev + build` do zero
+   e jornada completa de demonstração rodada uma vez de ponta a ponta.
+3. **Revisão + commit** do lote, e demonstração pronta para entrega.
 
 ## 4. Restrições
 

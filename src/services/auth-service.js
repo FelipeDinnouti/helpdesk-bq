@@ -14,7 +14,13 @@ async function login({ email, password }, { now = Date.now } = {}) {
   const at = now();
 
   if (!normalized || typeof password !== 'string' || password.length === 0) {
-    throw httpError(400, 'VALIDATION_ERROR', 'Revise os campos destacados.');
+    const err = httpError(400, 'VALIDATION_ERROR', 'Revise os campos destacados.');
+    err.details = [];
+    if (!normalized) err.details.push({ field: 'email', message: 'Informe um e-mail válido.' });
+    if (typeof password !== 'string' || password.length === 0) {
+      err.details.push({ field: 'password', message: 'Informe sua senha.' });
+    }
+    throw err;
   }
 
   const until = attempts.lockedUntil(normalized, at);

@@ -19,6 +19,13 @@ describe('POST /api/sessions', () => {
     expect(res.body.data.user.password_hash).toBeUndefined();
   });
 
+  test('body vazio dá 400 com details por campo', async () => {
+    const res = await request(app).post('/api/sessions').send({});
+    expect(res.status).toBe(400);
+    expect(res.body.error.code).toBe('VALIDATION_ERROR');
+    expect(res.body.error.details.map((d) => d.field).sort()).toEqual(['email', 'password']);
+  });
+
   test('senha errada dá 401 sem dizer se o e-mail existe', async () => {
     const wrong = await request(app)
       .post('/api/sessions')

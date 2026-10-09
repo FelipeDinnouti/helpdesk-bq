@@ -1,4 +1,3 @@
-const db = require('../../db/db');
 const { httpError } = require('../middlewares/error-handler');
 const { commentBody } = require('../lib/validate');
 const tickets = require('../repositories/ticket-repository');
@@ -27,10 +26,8 @@ function changeStatus(id, input, user) {
 
   // RF12: crítico só fecha com comentário de resolução — assertTransition já
   // exige comentário para qualquer fechamento; aqui vale para todo perfil.
-  const run = db.transaction(() => {
-    tickets.updateFields(id, {});
-    db.prepare('UPDATE tickets SET status = ?, updated_at = ? WHERE id = ?')
-      .run(to, new Date().toISOString(), id);
+  const run = tickets.transaction(() => {
+    tickets.setStatus(id, to);
     let comment = null;
     if (text.length > 0) {
       comment = comments.add({ ticket_id: id, author_id: user.id, body: text });

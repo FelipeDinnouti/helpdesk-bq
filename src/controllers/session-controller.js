@@ -7,6 +7,14 @@ async function create(req, res, next) {
     const session = await authService.login({ email, password });
     ok(res, session);
   } catch (err) {
+    if (err.code === 'VALIDATION_ERROR') {
+      return res.status(400).json({
+        error: {
+          code: err.code, message: err.message,
+          correlationId: req.correlationId, details: err.details || [],
+        },
+      });
+    }
     next(err);
   }
 }
