@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HelpDesk BQ — Entrar no sistema</title>
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+  <main class="login-page">
+    <section class="login-card" aria-labelledby="login-title">
+      <header class="login-card__header">
+        <span class="login-card__brand">HelpDesk BQ</span>
+        <!-- TODO(back): ajustar este textoauxiliar / domínio quando o back definir -->
+        <span class="login-card__hint" id="system-hint">acesso interno</span>
+      </header>
+
+      <div class="login-card__body">
+        <!-- Coluna do formulário -->
+        <div class="login-form-col">
+          <h1 id="login-title">Entrar no sistema</h1>
+
+          <!-- TODO(back): ligar action/method à rota real. Ex: action="/api/auth/login" method="POST" -->
+          <form id="login-form" novalidate>
+            <div class="field">
+              <label for="email">E-mail</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="aluno@ete"
+                placeholder="voce@exemplo.com"
+                autocomplete="username"
+                required
+              />
+              <small class="field__error" id="email-error" hidden>Informe um e-mail válido.</small>
+            </div>
+
+            <div class="field">
+              <label for="password">Senha</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                placeholder=""
+                autocomplete="current-password"
+                required
+              />
+              <small class="field__error" id="password-error" hidden>Informe sua senha.</small>
+            </div>
+
+            <button type="submit" id="login-btn" class="btn-entrar" disabled>Entrar</button>
+
+            <!-- Mensagem de erro vinda do back (ex: 401). Controlada via login.js -->
+            <p class="form-feedback" id="form-feedback" role="alert" hidden></p>
+          </form>
+        </div>
+
+        <!-- Coluna do fluxo (mock visual do print) -->
+        <aside class="login-flow-col" aria-label="Fluxo autenticado">
+          <h2>Fluxo autenticado</h2>
+          <ol class="flow-steps">
+            <li class="flow-step" data-step="credentials">
+              <span class="flow-step__dot" aria-hidden="true"></span>
+              <span>Credenciais válidas</span>
+            </li>
+            <li class="flow-step" data-step="session">
+              <span class="flow-step__dot" aria-hidden="true"></span>
+              <span>Sessão criada</span>
+            </li>
+            <li class="flow-step" data-step="dashboard">
+              <span class="flow-step__dot" aria-hidden="true"></span>
+              <span>Dashboard carregado</span>
+            </li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/login.js"></script>
+</body>
+</html>
