@@ -1,27 +1,26 @@
 ---
-title: Team and screens
-type: project
-status: source-of-truth
-updated: 2026-10-02
-tags: [project, team, screens, assignment, delegation]
+title: Equipe e telas
+type: projeto
+updated: 2026-10-09
+tags: [projeto, equipe, telas, atribuicao, delegacao]
 ---
 
-# Team and screens
+# Equipe e telas
 
-How work is delegated and how collaborators are addressed in every document,
-commit and review.
+Como o trabalho é delegado e como os colaboradores são dirigidos em documentos,
+commits e revisões.
 
 ---
 
-## 1. The addressing convention (read this first)
+## 1. A convenção de endereçamento (leia primeiro)
 
-**We never address a collaborator by name.** There are five of them; each owns
-one screen; the screen is the identity.
+**Nunca endereçamos um colaborador pelo nome.** São cinco; cada um é responsável
+por uma tela; a tela é a identidade.
 
-> **"colaborador responsável por &lt;Screen&gt;"**
-> *(the collaborator responsible for &lt;Screen&gt;)*
+> **"colaborador responsável por \<Tela\>"**
+> *(the collaborator responsible for \<Tela\>)*
 
-| Screen name (canonical, §3c of the glossary) | Addressing string |
+| Nome da tela (canônico) | Endereçamento |
 |---|---|
 | Login | colaborador responsável por **Login** |
 | Lista | colaborador responsável por **Lista** |
@@ -29,165 +28,154 @@ one screen; the screen is the identity.
 | Detalhe | colaborador responsável por **Detalhe** |
 | Dashboard | colaborador responsável por **Dashboard** |
 
-Why this and not a name or a job title:
+Por que assim, e não o nome ou um cargo:
 
-- It survives anyone being absent, swapped, or presenting.
-- It is unambiguous when two people touch the same ticket.
-- It maps 1:1 onto the deliverables that actually matter here: the five
-  screens, their states, and their accessibility and responsiveness checks
-  (Step 15, Step 16, Step 53).
-- It stops code and presentation concentrating in one person.
+- Sobrevive a alguém faltar, trocar ou apresentar.
+- Desambigua quando duas pessoas mexem no mesmo chamado.
+- Mapeia 1:1 nos entregáveis que realmente importam: as cinco telas, seus
+  estados, e as verificações de acessibilidade e responsividade.
+- Impede que código e apresentação se concentrem numa pessoa só.
 
-**Banned:** "owner of X", "the frontend guy", "the tester", "designer". See
-glossary §2 — `owner` is reserved for `ticket.owner_id`. The verb *owns* is
-allowed ("owns one screen"); the banned form is the **noun** `owner` applied to
-a person.
+**Proibido:** "owner de X", "o do front", "o testador", "designer". Ver
+[[reference/glossary]] §2 — `owner` é reservado para `ticket.owner_id`. O
+verbo *responsável* é permitido; a forma proibida é o **substantivo** `owner`
+aplicado a uma pessoa.
 
 ---
 
-## 2. The five screens and what each collaborator must deliver
+## 2. As cinco telas e o que cada um precisa entregar
 
-Screens come from **Step 15** and are the only thing we took verbatim from
-it. Everything else in this section is us deciding what a screen must have —
-keep the rules, they are the ones worth keeping.
+As telas vêm da seção **"Telas e suas funções"** da QTS. Os cinco
+colaboradores são um fato do nosso time; a QTS não diz "cinco".
 
-Each collaborator owns one screen **end to end**: markup, every state,
-accessibility, the 360 px layout, and the tests that screen's rules deserve.
-Nothing is handed off half-done.
+Cada um é responsável por uma tela **de ponta a ponta**: marcação, todos os
+estados, acessibilidade, layout em 360 px e os testes que as regras da tela
+merecem. Nada é entregue pela metade.
 
 ### 2.1 colaborador responsável por **Login**
 
-| Property | Value |
+| Propriedade | Valor |
 |---|---|
-| Screen id | `login` |
-| From the spec | Step 15 row 1 · RF01, RF02 · Passo 32 (auth) · Passo 30 error contract |
-| Required elements | e-mail, password, submit action, feedback |
-| Alternative state | **Error and lockout** — third failure locks for 10 min; the response must not reveal whether the e-mail exists |
-| Rules | 3 failures / 5 min → 10 min lock (RF02). Invalid credentials never say which field failed (US-01). |
-| States to prove | idle, submitting, wrong credentials, locked (423), network error |
-| A11y | labels tied to inputs, error announced and next to the field, focus moves to the message |
-| Verified by | CT for lockout, one negative API test, keyboard-only run |
+| ID da tela | `login` |
+| Da QTS | "Tela de Login" · bloco de **Backend**: login com bloqueio |
+| Elementos | e-mail · senha · ação de acesso · mensagens de erro ou bloqueio |
+| Estado alternativo | **Erro e bloqueio** — três tentativas inválidas em 5 min bloqueiam a conta por 10 min |
+| Estados a provar | inicial, enviando, credenciais inválidas, conta bloqueada, erro de rede |
+| Acessibilidade | rótulos ligados aos campos, erro anunciado e junto ao campo, foco vai para a mensagem |
+| Verificado por | caso de teste do bloqueio, um teste negativo de API, navegação só com teclado |
+| Já existe | `public/login.html` + `css/login.css` + `js/login.js` (mock visual; falta ligar na API) |
 
 ### 2.2 colaborador responsável por **Lista**
 
-| Property | Value |
+| Propriedade | Valor |
 |---|---|
-| Screen id | `list` |
-| From the spec | Step 15 row 2 · RF06, RF09 · Passo 48 (pagination + ordering) |
-| Required elements | filters (status, priority), status and priority of each row, pagination |
-| Alternative state | **Empty and loading** — RF14: explain the absence and offer a useful action |
-| Rules | requester sees own tickets; technician sees the authorised queue (RF06 — see the `queue` gap, glossary §6) |
-| States to prove | loading, results, empty, empty-with-filters, forbidden, network error |
-| A11y | filters labelled, sort/filter state announced, table semantics, 360 px without horizontal scroll |
-| Verified by | filter tests (isolated + combined), permission negative test, empty-state evidence |
+| ID da tela | `list` |
+| Da QTS | "Lista de chamados" |
+| Elementos | visualizar chamados · filtro por status · filtro por prioridade · combinar filtros · navegar pelos resultados · estado vazio |
+| Estado alternativo | **Vazio e carregando** — o estado vazio explica a ausência e oferece ação útil |
+| Regras | o solicitante vê seus próprios chamados; o técnico vê a fila autorizada |
+| Estados a provar | carregando, com resultados, vazio, vazio com filtro aplicado, sem permissão, erro de rede |
+| Acessibilidade | filtros rotulados, estado do filtro anunciado, semântica de tabela, 360 px sem rolagem horizontal |
+| Verificado por | testes de filtro (isolado e combinado), teste de permissão negativa, evidência do estado vazio |
+| **Bloqueado por** | **G1** (fila indefinida) e **G7** (paginação e ordenação) |
 
 ### 2.3 colaborador responsável por **Novo chamado**
 
-| Property | Value |
+| Propriedade | Valor |
 |---|---|
-| Screen id | `new-ticket` |
-| From the spec | Step 15 row 3 · RF03, RF04, RF05 · Passo 30 (Zod) · Passo 31 (submit) |
-| Required elements | title, description, priority |
-| Alternative state | **Validation and connection loss** |
-| Rules | title 10–100 chars, description ≥ 30, priority ∈ low/medium/high/critical. `requester_id` comes from the token, never the body (RF03, Passo 28) |
-| States to prove | idle, client invalid, server rejected (400), created (201 + id), offline, double-submit prevented |
-| A11y | error summary, focus to first invalid field, busy button during submit (Passo 31) |
-| Verified by | boundary values 9/10/100/101 and 29/30, unknown priority rejected, `201` + persisted row |
+| ID da tela | `new-ticket` |
+| Da QTS | "Tela de Novo Chamado" |
+| Elementos | título · descrição · prioridade |
+| Estado alternativo | **Validação e perda de conexão** |
+| Regras | título de 10 a 100 caracteres, descrição com pelo menos 30, prioridade baixa/média/alta/crítica |
+| Estados a provar | inicial, inválido no cliente, rejeitado pelo servidor, criado, sem conexão, envio duplicado evitado |
+| Acessibilidade | resumo de erros, foco no primeiro campo inválido, botão ocupado durante o envio |
+| Verificado por | valores-limite 9/10/100/101 e 29/30, prioridade desconhecida rejeitada, 201 + linha persistida |
+| **Bloqueado por** | **G5** (rota de login, se a sessão for criada antes do envio) |
 
 ### 2.4 colaborador responsável por **Detalhe**
 
-| Property | Value |
+| Propriedade | Valor |
 |---|---|
-| Screen id | `detail` |
-| From the spec | Step 15 row 4 · RF06, RF08, RF10, RF11, RF12 · Passo 29 (transitions) · Passo 45 (state diagram) |
-| Required elements | ticket data, history, comments, actions |
-| Alternative state | **Without permission** — 403, and no data leaks |
-| Rules | transitions `open → analysis → in_progress → resolved → closed`; `resolved → in_progress` (reopen) allowed; closing requires a comment (RF12); every change writes history (RF08) |
-| States to prove | full, no-permission (403), not-found (404), invalid-transition conflict (409), critical-without-resolution-comment |
-| A11y | status not conveyed by colour alone, history as a list with timestamps, action buttons describe their action |
-| Verified by | full transition matrix (positive + negative), history assertion on every transition, permission test |
-| **Blocked on** | `queue` and `owner_id` decisions (glossary §6) |
+| ID da tela | `detail` |
+| Da QTS | "Tela de Detalhes do Chamado" |
+| Elementos | dados do chamado · histórico · comentários · alterar status · alterar prioridade conforme permissão · ações permitidas ao perfil |
+| Estado alternativo | **Sem permissão** — 403, sem vazar dados |
+| Regras | `Aberto → Em análise → Em atendimento → Resolvido → Fechado`; retorno de Resolvido para Em atendimento; chamado crítico não fecha sem comentário de resolução; toda alteração grava autor, data, ação, valor anterior e novo valor |
+| Estados a provar | completo, sem permissão (403), não encontrado (404), transição inválida (409), crítico sem comentário de resolução |
+| Acessibilidade | status não comunicado só por cor, histórico como lista com datas, botões descrevem a ação |
+| Verificado por | matriz de transições (positivas e negativas), asserção de histórico em cada transição, teste de permissão |
+| **Bloqueado por** | **G1** (fila), **G2** (responsável), **G4** (endpoint de comentários), **G6** (exclusão), **G8** (reabertura) |
 
 ### 2.5 colaborador responsável por **Dashboard**
 
-| Property | Value |
+| Propriedade | Valor |
 |---|---|
-| Screen id | `dashboard` |
-| From the spec | Step 15 row 5 · RF13, RF14 · Passo 62 (blocks) · Passo 61 (metrics) |
-| Required elements | totals by status, totals by priority, filters, period |
-| Alternative state | **No data** — RF14 |
-| Rules | totals respect the same filters as the list; empty is comprehensible, not blank |
-| States to prove | totals, filtered, empty, loading, error |
-| A11y | each total labelled with its meaning, not a bare number; filters labelled; works at 360 px |
-| Verified by | report test (totals match the list), empty-state evidence, visual check |
-| **Blocked on** | `queue` and the unassigned Dashboard role (glossary §6, gap **G2**) |
+| ID da tela | `dashboard` |
+| Da QTS | "Dashboard / Relatórios" |
+| Elementos | quantidade por status · quantidade por prioridade · filtros · período de consulta |
+| Estado alternativo | **Sem dados** — estado vazio |
+| Regras | os totais respeitam os mesmos filtros da lista; o vazio é compreensível, não em branco |
+| Estados a provar | totais, filtrado, vazio, carregando, erro |
+| Acessibilidade | cada total rotulado com seu significado, nunca um número solto; filtros rotulados; funciona em 360 px |
+| Verificado por | teste do relatório (totais batem com a lista), evidência do estado vazio, verificação visual |
+| **Bloqueado por** | **G13** — a apostila (US-10) dá os totais à *gestora*, que não corresponde a nenhum dos três perfis da QTS |
 
 ---
 
-## 3. Cross-screen contracts (nobody owns these alone)
+## 3. Contratos entre telas (ninguém é dono sozinho)
 
-These are shared; the PM coordinates, and the named collaborators agree before
-implementation:
-
-| Contract | Screens involved | Spec |
+| Contrato | Telas | Origem |
 |---|---|---|
-| Screen shell, header, nav, spacing/type/colour roles | all five | RNF02, RNF03 |
-| Error envelope `{ error: { code, message, correlationId } }` | all five | RF15, Passo 20 |
-| Loading / empty / error state pattern | all five | RF14, RNF03 |
-| Status + priority enum→label map (glossary §3b) | Lista, Detalhe, Dashboard | RF05, RF11 |
-| Log events and `correlationId` | all five | RNF07, Passo 33 |
-| 360 px baseline | all five | RNF02, Step 53 |
+| Estrutura de tela, cabeçalho, navegação, espaçamento/tipografia/cores | as cinco | `specification.md` §3 + RNF02, RNF03 |
+| Envelope de erro `{ error: { code, message, correlationId } }` | as cinco | RNF05, apostila Passo 20 |
+| Padrão de estado carregando / vazio / erro | as cinco | `specification.md` §3.2, §3.3, §3.5 |
+| Mapa enum → rótulo de status e prioridade | Lista, Detalhe, Dashboard | [[reference/glossary]] §3b |
+| Eventos de log e `correlationId` | as cinco | RNF07 |
+| Linha de base de 360 px | as cinco | RNF02 |
 
-**Rule:** the *first* screen to need a shared
-pattern proposes it; ui-designer owns the visual direction; PM locks it in
-`docs/` before a second screen reuses it.
-
----
-
-## 4. Delegation checklist
-
-Before handing a screen to a collaborator, the PM provides:
-
-1. The screen row from Step 15 (elements + alternative state) and this file's
-   §2 block for that screen.
-2. The requirement IDs the screen must satisfy (RF/RNF).
-3. The shared contracts in §3, or a link to them.
-4. The visual language reference once locked.
-5. Acceptance criteria, in testable form.
-
-The collaborator returns: markup + states, a11y and 360 px evidence, focused
-tests, and a walkthrough the reviewer can re-run.
+**Regra:** quem precisar de um padrão compartilhado novo na primeira tela
+propõe; a direção visual é do `ui-designer`; o PM trava em `docs/` antes da
+segunda tela reutilizar.
 
 ---
 
-## 5. Team model — ours, not the spec's
+## 4. Checklist de delegação
 
-The spec organises the class into two groups with four rotating roles and a
-release committee. **We are not doing that.** Five people, five screens, one
-screen each, and the review/discipline work folded into the agent workflow
-(`ui-designer` proposes and implements the visual direction, `code-reviewer`
-gates every batch, PM owns process and docs).
+Antes de passar uma tela para alguém:
 
-What we still take from the spec, because it is cheap and it is graded:
+1. A linha da QTS daquela tela (elementos + estado alternativo) e o bloco §2
+   deste arquivo.
+2. Os IDs de requisito que a tela precisa satisfazer.
+3. Os contratos de §3, ou o link para eles.
+4. A referência de linguagem visual, assim que for travada.
+5. Critérios de aceite em forma testável.
 
-- Each student opens or reviews at least one pull request traceable to a story
-  (Passo 25).
-- Nobody hides a known defect; nothing is called done without evidence
-  (Orientation p. 6, challenge rules).
-
-What we drop: the two-group split, role rotation, the pass that expects two
-signatures, and the per-meeting ceremony. Details of what is kept per screen
-are in [[reference/spec-map#3-what-we-use]].
-
-> **Recorded 2026-10-02:** "five collaborators, one screen each" is ours. The
-> spec never says five; its screen list (Step 15) is exact and is what we
-> used. Addressing is by screen, never by name.
+Quem recebe devolve: marcação + estados, evidência de acessibilidade e de
+360 px, testes focados e um passo a passo que a revisão consiga reexecutar.
 
 ---
 
-## Related
+## 5. Divisão que a QTS propõe
 
-- [[reference/glossary]] — screen ids, the enum→label map, the addressing
-  string, banned words
-- [[reference/spec-map]] — the Step 15 row and every requirement behind §2
+A QTS divide o trabalho em três frentes — **Backend** (`src/`, `middlewares/`,
+`db/`), **Frontend** (`public/`) e **Testes** (`tests/`) — e diz que
+*"cada integrante trabalhe em uma parte sem interferir nas demais"*. Também
+pede branches próprias e integração por pull request.
+
+Adotamos essa organização **por tela**, porque é o que torna a entrega
+verificável: cada tela tem um responsável claro do início ao fim. As frentes da
+QTS continuam válidas como referência de camada.
+
+O plano em `thoughts/shared/plans/2026-10-09-react-express-front.md` propõe uma
+divisão diferente (`backend/` + `frontend/`, com React), que conflita com a
+especificação de stack da QTS. Ver [[reference/specification]] §8.1 — está em
+decisão, não aplicado.
+
+---
+
+## Relacionados
+
+- [[reference/glossary]] — IDs das telas, mapa enum → rótulo, palavras banidas
+- [[reference/specification]] — a QTS, seção por seção
 - [[project/charter]] · [[project/boundaries]] · [[workflow/roles-and-gates]]

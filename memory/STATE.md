@@ -1,85 +1,101 @@
-# helpdesk-bq — Transient State & Session Handoff
+# helpdesk-bq — Estado e passagem de turno
 
-Last updated: **2026-10-02**. **Spec read and indexed. Vocabulary locked.
-Docs batch built, awaiting reviewer gate.** Assignment due **Oct 9th**.
+Atualizado em **2026-10-09**. **QTS lida e documentação reindexada em pt-BR.**
+Entrega: **9 de outubro** (hoje).
 
-> **Operating principle:** `docs/` is the source of truth. This file is
-> transient working state: where things stand, what to do next, what not to
-> repeat. Decisions belong in `docs/`; status belongs here.
+> **Princípio:** `docs/` é a fonte da verdade. Este arquivo é estado
+> transitório: onde estamos, o que fazer agora, o que não repetir. Decisão mora
+> em `docs/`; situação mora aqui.
 
-## 1. Read these, in order
+## 1. Leia nesta ordem
 
-1. **This file** — where things stand.
-2. **`memory/TASK-01.md`** — the operative plan.
-3. **`docs/README.md`**, then **[[reference/glossary]]** — the naming
-   contract — before writing any code, screen, test or commit.
+1. **Este arquivo** — onde estamos.
+2. **`memory/TASK-01.md`** — o plano operante.
+3. **`docs/README.md`**, depois **[[reference/glossary]]** — o contrato de
+   nomenclatura — antes de escrever qualquer código, tela, teste ou commit.
 
-## 2. Current state
+## 2. Estado atual
 
-- **App:** still a skeleton. Express stubs (`src/app.js`, `src/server.js`),
-  empty `routes/`/`controllers/`/`services/`/`repositories/`,
-  `middlewares/`, `db/migrations/`, `public/`, `tests/`. **No UI exists yet.**
-- **Spec:** `Apostila_Operacao_Software_Confiavel.pdf` — **read 2026-10-02**,
-  102 pages. It is a course *methodology* handbook, not a product spec.
-  Indexed in [[reference/spec-map]].
-- **Team model (ours, not the spec's):** five collaborators, one screen each,
-  addressed as *"colaborador responsável por &lt;Screen&gt;"*. Never by name.
-  [[project/team-and-screens]].
-- **Vocabulary (locked 2026-10-02):** `ticket` is canonical; pt-BR display
-  alias `chamado` allowed in UI strings only, never in identifiers.
-  [[reference/glossary]].
-- **Adopted verbatim from the spec:** RF01–RF15, RNF01–RNF08, the Step 20 API
-  contract + error envelope, the Passo 19/26 data model, the Passo 34 seed
-  (3 users, 12 tickets).
-- **Dropped from the spec:** two groups, rotating roles, 16-meeting cadence,
-  double-signed gates, release committee, printable evidence sheets.
-- **Open and blocking:** G1 (`owner_id` missing from the migration), G2
-  (*fila*/queue undefined, Dashboard role unassigned), G4 (no comments or
-  delete route). Together these block **Detalhe**, the most complex screen.
-- **Resolved this batch:** G3 (status/priority enum→label map is now in
-  glossary §3b). **Open but not blocking:** G7–G11, decided as their screen
-  comes up.
+- **Especificação:** `Documentação QTS - HelpDesk.pdf` (11 p., escrita pelo
+  grupo) é a **fonte da verdade do produto**. `Apostila_Operacao_Software_
+  Confiavel.pdf` (102 p.) é material complementar da disciplina e traz a
+  rubrica. Índice em `docs/reference/specification.md`.
+- **Vocabulário:** travado. `ticket` é o termo canônico; **"chamado"** só em
+  string visível ao usuário, nunca em identificador. `docs/reference/glossary.md`.
+- **Equipe:** cinco colaboradores, uma tela cada, dirigidos como
+  *"colaborador responsável por &lt;Tela&gt;"*, nunca pelo nome.
+  `docs/project/team-and-screens.md`.
+- **Aplicação:**
+  - Front: **tela de Login entregue** em `public/login.html` + `css/login.css` +
+    `js/login.js`, com mock do fluxo e ganchos `TODO(back)`. **Não integrada.**
+  - Back: esqueleto. `src/app.js` e `src/server.js` são comentários; rotas,
+    controller, service e middleware são placeholders.
+  - **Sem `package.json` na raiz. Sem dependências. Sem banco. Sem testes. Sem
+    seed.** Nada roda ainda.
+- **Maior decisão pendente:** `frontend/` (React 19 + Vite) contra `public/`
+  (vanilla). A QTS especifica vanilla e justifica a escolha; as duas versões
+  chegaram no mesmo PR #1. Ver **G10**.
+- **Lacunas abertas (G1–G14):** canônicas em `docs/reference/specification.md`
+  §7, com o que cada uma bloqueia. As que travam telas: **G1** (fila), **G2**
+  (responsável técnico — a apostila exige, a QTS não menciona), **G4** (sem
+  endpoint de comentários), **G5** (rota de login — a QTS não nomeia nenhuma),
+  **G7** (paginação), **G8** (reabertura de fechado), **G13** (leitor do
+  Dashboard). As de arquitetura: **G12** (React × vanilla), **G11**
+  (local de `app.js`/`server.js`).
 
-## 3. Next
+## 3. Próximo
 
-1. **Decide G1 + G2 + G4** — one decision-log block. Unblocks Detalhe.
-2. **Lock the visual language** via ui-designer (shell, nav, state panels,
-   spacing, type, colour roles) before the first screen is built.
-3. **Build the five screens**, one batch each: Login → Novo chamado → Lista →
-   Detalhe → Dashboard (dependency order, not the spec's order).
-   Each batch: implement → verify → visual PASS → reviewer PASS → commit.
-4. Decide G7 (`correlationId` format), G8 (reopen), G9 (delete semantics),
-   G10 (pagination) when the screen that needs them comes up.
+1. **Decidir G10** — `public/` vanilla (QTS) ou `frontend/` React. Isso decide
+   a base de todo o resto da interface. Uma decisão, uma linha no registro.
+2. **Criar `package.json` na raiz**, com `dev`, `test`, `lint`, `start`,
+   `migrate` e `seed`. Sem isso não há como rodar nem demonstrar.
+3. **Decidir G5** (rota de login) e ajustar o mock em `public/js/login.js`,
+   com um comentário `TODO(back)` que sugere `/api/auth/login`.
+4. **Travar a linguagem visual** com o `ui-designer` antes da segunda tela.
+5. **Levantar o backend**: migrações (`users`, `tickets`, `comments`,
+   `ticket_history`, `login_attempts`, `categories`), login com JWT + bcrypt e
+   bloqueio, CRUD de chamados com as validações, transição de status, histórico
+   e `/api/reports/summary`.
+6. **Seed** com os 12 chamados da apostila, para a demonstração não abrir
+   vazia.
+7. **Resolver G1, G2, G4, G7, G8** antes de construir Lista, Detalhe e Dashboard.
 
-## 4. Constraints
+## 4. Restrições
 
-- **Do not follow the PDF's process rules.** Take the product contract, ignore
-  the ceremony. The user said so explicitly.
-- Review budget: 2 rounds/batch; DOC batched, never blocking alone.
-- Visual PASS mandatory on UI batches.
-- Standing commit authority: conventional commits whenever green + reviewed.
-- No secrets in source/docs/memory. No history rewrites.
-- New noun in code → entry in `docs/reference/glossary.md` first.
+- **A QTS manda.** Se um `.md` divergir do PDF, o PDF vence.
+- **Não seguir o processo da apostila.** O produto dela sim, o cerimonial não.
+- Orçamento de revisão: 2 rodadas por lote; achado DOC agrupado.
+- PASS visual obrigatório em lote de interface.
+- Autoridade de commit permanente: mensagem convencional quando verde e revisado.
+- Sem segredo em código, documento ou memória. Sem reescrita de histórico.
+- Substantivo novo no código → entrada no glossário antes.
 
-## 5. Do not repeat (inherited from tessilion, paid for in rounds)
+## 5. Não repetir
 
-- No unreviewed batch in a commit; gate fires per batch.
-- Every finding gets a ledger row before the fixing commit.
-- Assert scripted edits landed; confirm by reading changed lines.
-- Mutation-check bug-fix tests.
-- Smoke ≠ visual; suite-green ≠ works.
+- Nenhum lote sem revisão vai para commit.
+- Todo achado ganha linha no ledger do ciclo **antes** do commit que corrige.
+- **Afirmar que a edição entrou é obrigatório; confiar cegamente no script, não.**
+  Editação roteirizada que casa com nada parece que funcionou — confirmar lendo as
+  linhas mudadas.
+- Teste de correção passa por mutação.
+- Smoke ≠ visual; suíte verde ≠ funciona.
+- **Mock ≠ integração:** o mock de Login prova o visual, não o login.
 
-## 6. Repository map
+## 6. Mapa do repositório
 
-| Path | What it is |
+| Caminho | O que é |
 |---|---|
-| `docs/README.md` | docs index — start here |
-| `docs/reference/glossary.md` | **naming contract — read before writing code** |
-| `docs/project/team-and-screens.md` | five screens, five collaborators, per-screen deliverables |
-| `docs/reference/spec-map.md` | the PDF indexed; what we use; gaps G1–G11 |
-| `docs/decisions/decision-log.md` | every locked decision, one line each |
-| `memory/STATE.md` | this file — entry point |
-| `memory/TASK-01.md` | operative plan |
-| `.opencode/agents/` | personas — workflow authority |
-| `.opencode/commands/` | `/microfix` — the micro-change lane |
-| `src/` `public/` `db/` `middlewares/` `tests/` | the app (all writable) |
+| `docs/README.md` | índice da documentação — comece aqui |
+| `docs/reference/specification.md` | **a QTS reorganizada** |
+| `docs/reference/glossary.md` | **contrato de nomenclatura — leia antes de codar** |
+| `docs/project/team-and-screens.md` | as cinco telas e seus responsáveis |
+| `docs/reference/spec-map.md` | a apostila e a rubrica |
+| `docs/reference/known-issues.md` | lacunas G1–G12 e itens abertos |
+| `docs/decisions/decision-log.md` | cada decisão travada, uma linha |
+| `docs/decisions/product-decisions.md` | decisões de produto PD-01…PD-07 |
+| `memory/STATE.md` | este arquivo — porta de entrada |
+| `memory/TASK-01.md` | plano operante |
+| `.opencode/agents/` | personas — autoridade do fluxo |
+| `.opencode/commands/` | `/microfix` — a via de mudança pequena |
+| `src/` `public/` `db/` `middlewares/` `tests/` | a aplicação |
+| `frontend/` `thoughts/` | material de outro colaborador — não tocar sem decisão |

@@ -1,68 +1,79 @@
 ---
-title: helpdesk-bq documentation
-type: index
-status: source-of-truth
-updated: 2026-10-02
-tags: [index, helpdesk-bq]
+title: Documentação do helpdesk-bq
+type: indice
+status: fonte-da-verdade
+updated: 2026-10-09
+tags: [indice, helpdesk-bq, documentacao]
 ---
 
-# helpdesk-bq documentation
+# Documentação do helpdesk-bq
 
-> **Docs is the source of truth.** `memory/` holds only current state,
-> direction, and next steps. Anything *decided* lives here.
+> **`docs/` é a fonte da verdade.** `memory/` guarda só estado atual, direção e
+> o próximo passo. O que foi *decidido* mora aqui.
+>
+> **A fonte da verdade do produto é `Documentação QTS - HelpDesk.pdf`.** Se
+> qualquer arquivo deste vault divergir da QTS, **a QTS vence**.
 
-## Start here
+## Comece aqui
 
-| If you want to… | Read |
+| Se você quer… | Leia |
 |---|---|
-| **Write code, name something, or write a commit** | [[reference/glossary]] — the naming contract. Read this first. |
-| **Know what you own and what to hand over** | [[project/team-and-screens]] — five screens, five collaborators |
-| **Check what the assignment PDF demands** | [[reference/spec-map]] — indexed, and what we actually use |
-| Know what the project is | [[project/charter]] |
-| Know what you may touch | [[project/boundaries]] |
-| Know what gates a change | [[workflow/roles-and-gates]] |
-| See current state and what's next | `../memory/STATE.md` |
-| Understand a past decision | [[decisions/decision-log]] |
-| See what is built and what is not | [[cycles/README]] |
+| **Escrever código, nomear algo ou escrever um commit** | [[reference/glossary]] — o contrato de nomenclatura. Leia primeiro. |
+| **Saber o que você tem a seu cargo e o que passar adiante** | [[project/team-and-screens]] — cinco telas, cinco colaboradores |
+| **Saber o que o sistema faz** | [[reference/specification]] — a QTS reorganizada |
+| **Saber o que a disciplina pede e como é nota** | [[reference/spec-map]] — a apostila e a rubrica |
+| **Saber o que pode ser tocado** | [[project/boundaries]] |
+| **Saber o que libera uma mudança** | [[workflow/roles-and-gates]] |
+| **Ver o estado atual e o próximo passo** | `../memory/STATE.md` |
+| **Entender uma decisão anterior** | [[decisions/decision-log]] |
+| **Ver o que está pronto e o que não está** | [[cycles/README]] |
 
-## Reference
+## Referência
 
-- [[reference/glossary]] — **canonical vocabulary, banned synonyms, enums, ID
-  conventions, open word gaps.** Binding on code, screens, tests and docs.
-- [[reference/spec-map]] — the 102-page assignment PDF: structure, the 15 RFs,
-  8 RNFs, API contract, data model, seed, rubric, lookup index of all 67 steps,
-  plus 11 gaps the spec leaves open.
-- [[reference/verification-pitfalls]] — ways green checks don't mean it works
-- [[reference/known-issues]] — deferred items, open questions
+- [[reference/glossary]] — **vocabulário canônico, palavras proibidas, enums,
+  convenção de IDs e lacunas de palavra em aberto.** Vinculante para código,
+  telas, testes e documentos.
+- [[reference/specification]] — a QTS: o problema, a entrevista, as cinco telas,
+  os três perfis, a stack, a estrutura de pastas, a divisão do trabalho, e as
+  **divergências entre a documentação e o repositório**.
+- [[reference/spec-map]] — índice da apostila da disciplina: RF01–RF15,
+  RNF01–RNF08, contrato de API, modelo de dados, seed, os 67 passos e a
+  **rubrica de avaliação**.
+- [[reference/known-issues]] — lacunas em aberto, com dono e bloqueio
+- [[reference/verification-pitfalls]] — como uma verificação verde ainda pode
+  não significar que funciona
 
-## Project
+## Projeto
 
-- [[project/charter]] — mission, goals, non-goals, baseline
-- [[project/boundaries]] — scope, safety, writable areas
-- [[project/team-and-screens]] — screen assignment, the
-  `colaborador responsável por <Screen>` convention, per-screen deliverables,
-  shared cross-screen contracts
+- [[project/charter]] — problema, missão, objetivos, não objetivos, restrições
+- [[project/boundaries]] — escopo, segurança, áreas graváveis, nomenclatura
+- [[project/team-and-screens]] — atribuição de telas, a convenção de
+  endereçamento `colaborador responsável por <Tela>`, entregáveis por tela,
+  contratos entre telas
 
-## Workflow
+## Fluxo de trabalho
 
-- [[workflow/roles-and-gates]] — roles, approval model, verification gates,
-  review budget (2 rounds), visual gate
-- [[workflow/micro-change-lane]] — the lightweight lane + `/microfix`
+- [[workflow/roles-and-gates]] — papéis, modelo de aprovação, gates de
+  verificação, orçamento de 2 rodadas, gate visual
+- [[workflow/micro-change-lane]] — a via leve + `/microfix`
 
-## Decisions
+## Decisões
 
-- [[decisions/product-decisions]] — approved product decisions
-- [[decisions/decision-log]] — chronological record
+- [[decisions/product-decisions]] — decisões de produto aprovadas (PD-01…PD-07)
+  e a lista do que está em aberto
+- [[decisions/decision-log]] — registro cronológico
 
-## Cycles
+## Ciclos
 
-See [[cycles/README]] for the index with status per cycle.
+Ver [[cycles/README]] para o índice com a situação de cada ciclo.
 
-## Conventions
+## Convenções
 
-- Every file carries YAML front matter with `title`, `type`, and `tags`.
-- One concept, one word. If the word is not in the glossary, it does not go
-  into an identifier yet.
-- Decision records are kept when superseded, marked superseded with a link —
-  reasoning is worth more than conclusions.
-- Relative links use `folder/note` form.
+- Todo arquivo tem front matter YAML com `title`, `type`, `updated` e `tags`.
+- Um conceito, uma palavra. Se a palavra não está no glossário, ela ainda não
+  entra em identificador.
+- Os caminhos dos arquivos continuam em inglês porque são referenciados pelo
+  ledger de ciclo e pelo histórico do git; **o conteúdo é pt-BR**.
+- Registros de decisão são mantidos quando superados, marcados como superados
+  com link — o raciocínio vale mais que a conclusão.
+- Links relativos usam a forma `pasta/nota`.

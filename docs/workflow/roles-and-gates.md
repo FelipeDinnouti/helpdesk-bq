@@ -1,78 +1,83 @@
 ---
-title: Roles, approval model and verification gates
-updated: 2026-10-02
+title: Papéis, modelo de aprovação e gates de verificação
+updated: 2026-10-09
 type: workflow
-tags: [workflow, agents, gates]
+tags: [fluxo, agentes, gates]
 ---
 
-# Roles, approval model and verification gates
+# Papéis, modelo de aprovação e gates de verificação
 
-Readable copy. Operative sources: `.opencode/agents/`.
+Cópia legível. Fontes operacionais: `.opencode/agents/`.
 
-## The three personas
+## As três personas
 
-| Persona | Mode | Owns | Never does |
+| Persona | Modo | Responsável por | Nunca faz |
 |---|---|---|---|
-| `project-manager` | primary | Scope, memory + `docs/`, coordination, verification, commits (standing authority) | Commit an unreviewed batch |
-| `ui-designer` | first-class collaborator | Auditing pages, proposing with evidence, implementing approved visual slices | Change API/data contracts, commit, write memory |
-| `code-reviewer` | read-only | Pre-commit gate: scope, wiring, looks-alignment, a11y, hygiene | Edit, commit, redesign |
+| `project-manager` | principal | Escopo, memória + `docs/`, coordenação, verificação, commits (autoridade permanente) | Commitar um lote não revisado |
+| `ui-designer` | colaborador de primeira classe | Auditar telas, propor com evidência, implementar cortes visuais aprovados | Mudar contratos de API/dados, commitar, escrever memória |
+| `code-reviewer` | somente leitura | Gate pré-commit: escopo, fiação, alinhamento visual, a11y, higiene | Editar, commitar, redesenhar |
 
-## Approval model
+## Modelo de aprovação
 
-- The **user breaks taste ties**; the PM approves inside-plan work. "Looks
-  good / continue" inside an agreed plan is approval to proceed.
-- The **`code-reviewer` is the technical gate**: `PASS` / `CHANGES REQUIRED`,
-  before every commit.
-- **Visual PASS is mandatory on UI batches**. This is *our* standard, not the
-  rubric's: the grading weights have no appearance line (spec-map §1), but a
-  half-finished-looking screen reads as unfinished in a live demo. Rendered
-  inspection or user verdict on the exact route, recorded in the cycle ledger.
-- **Standing commit authority is granted.** Commit whenever a batch is green
-  and reviewed, with a conventional message. This narrows *whether to ask*,
-  never *what gates*: reviewer PASS + checks + visual PASS (on UI) still
-  required. The batch is the unit: implement → verify → review → commit.
+- O **usuário desempata gosto**; o PM aprova o que está dentro do plano. "Looks
+  good / continue" dentro de um plano acordado é aprovação para seguir.
+- O **`code-reviewer` é o gate técnico**: `PASS` / `CHANGES REQUIRED`, antes de
+  todo commit.
+- **PASS visual é obrigatório em lotes de interface.** Este é *nosso* padrão,
+  não o da rubrica: a nota não tem linha de aparência (ver §6 da
+  [[reference/spec-map]]), mas uma tela com cara de inacabada lê como inacabada
+  na demonstração. Inspeção da tela renderizada ou veredito do usuário na rota
+  exata, registrado no ledger do ciclo.
+- **Autoridade de commit permanente.** Commitar quando o lote estiver verde e
+  revisado, com mensagem convencional. Isso estreita *se é preciso perguntar*,
+  nunca *o que libera*: PASS do revisor + verificações + PASS visual (em
+  interface) continuam obrigatórios. O lote é a unidade: implementar →
+  verificar → revisar → commitar.
 
-## Session startup
+## Início de sessão
 
-1. `memory/STATE.md` 2. `memory/TASK-01.md` 3. `docs/README.md` + relevant file.
+1. `memory/STATE.md` 2. `memory/TASK-01.md` 3. `docs/README.md` + o arquivo relevante.
 
-## Classification
+## Classificação
 
-Housekeeping / visual refinement / structural / behavioral-contract. See
-[[workflow/micro-change-lane]].
+Manutenção / refinamento visual / mudança estrutural / mudança de
+comportamento ou contrato. Ver [[workflow/micro-change-lane]].
 
-## Verification (per batch)
+## Verificação (por lote)
 
 - `git diff --check`
-- App boots + smoke of touched routes
-- Focused checks for the slice; full suite when it exists
-- Visual check on UI batches (screenshot or user verdict — smoke ≠ visual)
-- Reviewer verdict
+- A aplicação sobe + smoke das rotas tocadas
+- Verificações focadas da fatia; suíte completa quando existir
+- Verificação visual em lotes de interface (captura ou veredito do usuário —
+  smoke ≠ visual)
+- Veredito do revisor
 
-## Budgets (tightened for Oct 9)
+## Orçamentos (apertados para 9 de outubro)
 
-- **Two review rounds per batch max.** Round 2 repeating round 1's species →
-  change the process, not a third round.
-- **DOC findings never block alone** (unless load-bearing); batched, cleared
-  in one pass.
-- **Bug-fix tests mutation-checked**: invert the fix → test must fail.
-- **Assert edits landed**: scripted edits report misses; confirm by reading
-  changed lines.
+- **No máximo duas rodadas de revisão por lote.** Se a rodada 2 repete a
+  espécie da rodada 1 → mudar o processo, não pedir uma terceira.
+- **Achado DOC nunca bloqueia sozinho** (a não ser que seja load-bearing);
+  agrupados, limpos numa passada.
+- **Testes de correção passam por mutação:** inverter a correção → o teste
+  tem que falhar.
+- **Afirmar que a edição entrou:** edições roteirizadas relatam falhas;
+  confirmar lendo as linhas mudadas.
 
-## Severity
+## Severidade
 
-**BLOCKER** (scope/broken/security/a11y-failure/unapproved regression/missing
-verification) · **NON-BLOCKING** (debt) · **FOLLOW-UP** (later) · **DOC**
-(prose; batch it).
+**BLOCKER** (escopo/quebrado/segurança/falha de a11y/regressão não aprovada/
+verificação ausente) · **NON-BLOCKING** (dívida) · **FOLLOW-UP** (depois) ·
+**DOC** (prosa; agrupar).
 
-## Escalation
+## Escalonamento
 
-Multiple plausible directions, unapproved structural change, contract
-contradiction, new endpoint/rule needed, feedback vs locked decision,
-plan-changing verification risk, repeated-species review, or 2-round budget
-hit → stop and ask.
+Direções plausíveis múltiplas, mudança estrutural não aprovada, contradição de
+contrato, endpoint/regra nova que não devo inventar, retorno que briga com uma
+decisão travada, risco de verificação que muda o plano, revisão que repete
+espécie, ou orçamento de 2 rodadas estourado → parar e perguntar.
 
-## Related
+## Relacionados
 
 - [[workflow/micro-change-lane]]
 - [[project/boundaries]]
+- [[reference/specification]] — a QTS, fonte da verdade do produto

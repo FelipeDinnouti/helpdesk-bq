@@ -1,42 +1,45 @@
 ---
-title: Micro-change lane and the /microfix command
+title: Via de mudança pequena e o comando /microfix
 updated: 2026-10-02
 type: workflow
-tags: [workflow, microfix]
+tags: [fluxo, microfix]
 ---
 
-# Micro-change lane
+# Via de mudança pequena
 
-Readable copy. Operative source:
+Cópia legível. Fonte operacional:
 `.opencode/agents/project-manager.md`.
 
-## When the lane applies (ALL must hold)
+## Quando a via se aplica (todas precisam valer)
 
-- Explicit, local, small, reversible; one component or cohesive file set.
-- Visual, copy, spacing, alignment, a11y, or minor interaction polish within
-  an approved direction.
-- No new endpoint, data model, permission, route, dependency, global theme,
-  architecture, or business behavior.
-- No live mutation beyond the assignment's normal CRUD; no new decision.
-- Doesn't change what the component *is*. "Different kind of thing now" =
-  never a micro-change.
+- Explícita, local, pequena, reversível; um componente ou um conjunto coeso.
+- Visual, texto, espaçamento, alinhamento, a11y ou polimento de interação
+  dentro de uma direção já aprovada.
+- Sem endpoint, modelo de dados, permissão, rota, dependência, tema global,
+  arquitetura ou comportamento de negócio novos.
+- Sem mutação viva além do CRUD normal da assignment; sem decisão nova.
+- Não muda o que o componente *é*. "Agora é um tipo de coisa diferente" =
+  nunca é mudança pequena.
 
-## Execution
+## Execução
 
-1. One-sentence scope, confirm low risk. 2. Smallest change. 3. Focused
-   checks (+ boot/smoke when rendering/routes affected) + `git diff --check`.
-   4. A11y/responsive glance for UI. 5. Report files + evidence + risk.
+1. Escopo em uma frase, confirmando risco baixo. 2. Menor mudança possível.
+3. Verificações focadas (+ boot/smoke quando renderização ou rotas forem
+   afetadas) + `git diff --check`. 4. Olhada em a11y/responsivo para
+   interface. 5. Relatar arquivos + evidência + risco.
 
-## What it doesn't skip
+## O que ela não pula
 
-- No new plan entry required. Record in `docs/` when a decision/scope/
-  contract/verification state changes; in `memory/` when state/next steps
-  change.
-- Full reviewer gate still required before commit when behavior, data,
-  contracts, a11y, shared styles, routes, or several surfaces are touched.
-- Never bypasses a safety rule.
+- Não exige nova entrada no plano. Registrar em `docs/` quando mudar o estado
+  de uma decisão, escopo, contrato ou verificação; em `memory/` quando mudar o
+  estado ou o próximo passo.
+- O gate completo do revisor continua obrigatório antes do commit quando
+  comportamento, dados, contratos, a11y, estilos compartilhados, rotas ou
+  várias superfícies forem tocados.
+- Nunca burla uma regra de segurança.
 
-## The `/microfix` command
+## O comando `/microfix`
 
-`.opencode/commands/microfix.md`, `/microfix <description>`. Selects this
-lane, adds nothing. Restart OpenCode after creating/editing commands.
+`.opencode/commands/microfix.md`, `/microfix <descrição>`. Seleciona esta
+via, não acrescenta nada. Reiniciar o OpenCode depois de criar ou editar
+comandos.

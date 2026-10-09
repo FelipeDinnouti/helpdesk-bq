@@ -1,57 +1,89 @@
 ---
-title: Boundaries and scope rules
-updated: 2026-10-02
-type: project
-tags: [project, boundaries, safety]
+title: Limites e regras de escopo
+type: projeto
+updated: 2026-10-09
+tags: [projeto, limites, escopo, seguranca]
 ---
 
-# Boundaries and scope rules
+# Limites e regras de escopo
 
-Operative source alongside `.opencode/agents/project-manager.md`.
+Fonte operacional junto de `.opencode/agents/project-manager.md`.
 
-## Writable areas (nothing frozen)
+## Áreas graváveis (nada congelado)
 
-| Path | What it is |
+| Caminho | O que é |
 |---|---|
-| `src/` | Express app: `app.js`, `server.js`, `routes/`, `controllers/`, `services/`, `repositories/` |
-| `public/` | Static frontend (HTML/CSS/JS) — the graded surface |
-| `db/` + `migrations/` | Schema + seeds |
-| `middlewares/` | Express middlewares |
-| `tests/` | Assignment test suite |
-| `docs/` + `memory/` | Decisions + working state |
+| `src/` | Aplicação Express: `app.js`, `server.js`, `routes/`, `controllers/`, `services/`, `repositories/` |
+| `public/` | Frontend estático (HTML/CSS/JS) — **a superfície avaliada** |
+| `db/migrations/` | Esquema e sementes |
+| `middlewares/` | Middlewares do Express |
+| `tests/` | Suíte de testes |
+| `docs/` + `memory/` | Decisões + estado de trabalho |
+| `frontend/` | Projeto React experimental — **fora até a decisão G10** |
 
-## Scope
+## Estrutura de referência
 
-- Implementation scope is the whole app above. No frozen repos, no
-  off-limits paths.
-- Layering: SQL in `repositories/`, business rules in `services/`,
-  HTTP in `controllers/`/`routes/`. Controllers stay thin.
-- Endpoint/contract changes get a one-line decision-log entry. No silent
-  semantic changes.
+A QTS define a estrutura do projeto (§5.2 de [[reference/specification]]). Vale
+a da QTS, com uma divergência já registrada:
 
-## Safety
+| Item | QTS | Repositório | Decisão |
+|---|---|---|---|
+| `app.js`, `server.js` | na raiz | `src/app.js`, `src/server.js` | **em aberto** — ver §8.2 da especificação |
+| Frontend | `public/` (HTML/CSS/JS) | `public/` **e** `frontend/` (React) | **em aberto** — ver §8.1 da especificação |
+| Pastas e arquivos | os 12 itens da tabela de funcionalidades | + `frontend/`, `thoughts/`, PDFs | documentado, não removido |
 
-- No secrets in source, docs, or memory.
-- Migrations reversible; no destructive data loss on the assignment path.
-- No fake data shipped as real. Deterministic seed data labeled as such.
-- No history rewrites (no reset/force-push/shared rebase).
-- Commits under standing authority: whenever a batch is green + reviewed,
-  conventional message (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`,
+Nenhuma dessas duas divergências foi alterada por esta documentação. Decidir
+com o grupo antes de reorganizar qualquer coisa: mexer nisso quebra trabalho de
+outra pessoa.
+
+## Escopo
+
+- O escopo de implementação é a aplicação inteira acima. Sem repositórios
+  congelados, sem caminhos interditados.
+- **Camadas:** SQL em `repositories/`, regra de negócio em `services/`, HTTP em
+  `controllers/`/`routes/`. Controller fino.
+- Fluxo, conforme a QTS: `Interface web → Rotas → Controllers → Services →
+  Repositories → Banco de dados`.
+- Mudança de endpoint ou contrato ganha uma linha no registro de decisões. Nada
+  de semântica nova em silêncio.
+
+## Ao entrar no produto
+
+- O que a QTS define é obrigatório até ela mudar.
+- O que a apostila acrescenta (RNF, contrato de API, RF) entra **desde que não
+  contradiga a QTS**. Onde contradiz, é lacuna, não requisito — ver
+  [[reference/specification]] §7.
+- Trabalho de outra pessoa (`public/`, `frontend/`, `thoughts/`) não é
+  descartado nem reescrito sem o grupo decidindo.
+
+## Segurança
+
+- Sem segredo em código, documentos ou memória.
+- Migrações reversíveis; sem perda destrutiva de dados no caminho da
+  assignment.
+- Sem dado fictício vendido como real. Seed determinístico e rotulado.
+- Sem reescrita de histórico (sem reset, force-push ou rebase de branch
+  compartilhada).
+- Commits sob autoridade permanente: quando o lote estiver verde e revisado,
+  mensagem convencional (`feat:`, `fix:`, `docs:`, `refactor:`, `test:`,
   `chore:`).
 
-## Canonical references
+## Referências canônicas
 
-- `Apostila_Operacao_Software_Confiavel.pdf` — the assignment spec (102 pages).
-  **Read 2026-10-02.** Indexed in [[reference/spec-map]]; nobody needs to
-  reread it. The binding subset is spec-map §3.
-- [[reference/glossary]] — the naming contract. Binding on every identifier.
-- [[project/team-and-screens]] — screen assignment and per-screen deliverables.
-- `src/` + `public/` current code — the implementation baseline.
+- **`Documentação QTS - HelpDesk.pdf`** — a fonte da verdade do produto.
+  Indexada em [[reference/specification]]. **Se um `.md` daqui divergir da QTS,
+  a QTS vence.**
+- `Apostila_Operacao_Software_Confiavel.pdf` — material da disciplina, com a
+  rubrica. Índice em [[reference/spec-map]]. Está no `.gitignore`.
+- [[reference/glossary]] — contrato de nomenclatura, vinculante para todo
+  identificador.
+- [[project/team-and-screens]] — atribuição de telas e entregáveis por tela.
+- `src/` + `public/` — a linha de base da implementação.
 
-## Naming
+## Nomenclatura
 
-Any new noun in the codebase gets an entry in [[reference/glossary]] first,
-with its banned synonyms. Existing spec vocabulary is adopted as written
-(`ticket`, `requester`, `technician`, `admin`, `owner`, `comment`, `status`,
-`priority`, `history`); the pt-BR display alias `chamado` is the single
-declared exception and never appears in an identifier.
+Qualquer substantivo novo no código ganha entrada em [[reference/glossary]]
+antes, com sua lista de proibições. O vocabulário herdado dos documentos é
+adotado como está (`ticket`, `requester`, `technician`, `admin`, `comment`,
+`status`, `priority`, `history`, `category`); o alias pt-BR **chamado** é a
+única exceção declarada e nunca aparece em identificador.

@@ -1,62 +1,77 @@
-# TASK-01 — helpdesk-bq build
+# TASK-01 — helpdesk-bq
 
-Status: **spec read and indexed; vocabulary and team model locked (2026-10-02).
-Docs batch awaiting reviewer gate. Build phase not started — no UI exists.**
+Situação: **QTS lida, documentação reindexada em pt-BR. Implementação não
+começada — a aplicação ainda não roda.**
 
-Authority: `docs/` holds decisions; **this file is the operative plan while
-open.** Retrospectives go to the cycle ledger at write time, never accumulate
-here.
+Autoridade: `docs/` guarda as decisões; **este arquivo é o plano operante
+enquanto aberto.** Retrospectivas vão para o ledger do ciclo na hora, nunca se
+acumulam aqui.
 
-## 1. Locked
+## 1. Travado
 
-- `ticket` is the canonical noun; pt-BR alias `chamado` in UI strings only.
-- Five collaborators, one screen each, addressed as "colaborador responsável
-  por <Screen>", never by name.
-- RF01–RF15, RNF01–RNF08, the Step 20 API contract, the Passo 19/26 data
-  model and the Passo 34 seed are adopted verbatim.
-- The PDF's process rules are **not** followed.
-- 2-round review cap; DOC batched; visual PASS mandatory on UI batches;
-  standing commit authority, conventional commits.
+- A `Documentação QTS - HelpDesk.pdf` define o produto. A apostila complementa e
+  nunca contradiz; onde as duas divergem, vira lacuna, não requisito.
+- Stack: Node.js + Express, **front HTML/CSS/JS de `public/`**, PostgreSQL,
+  JWT + bcrypt, Jest + Supertest.
+- `ticket` é o substantivo canônico; pt-BR **chamado** só em string visível.
+- Cinco telas, cinco colaboradores, dirigidos como *"colaborador responsável por
+  &lt;Tela&gt;"*, nunca pelo nome.
+- Sequência de status fechada, com retorno de Resolvido para Em atendimento, e
+  crítico não fecha sem comentário de resolução.
+- Três perfis: `requester`, `technician`, `admin`.
+- Fora do produto: chat, anexos, notificações reais, integração externa,
+  recuperação por e-mail, SLA automático, auditoria exportável.
+- 2 rodadas de revisão por lote; achado DOC agrupado; PASS visual obrigatório em
+  interface; autoridade de commit permanente.
 
-## 2. Done
+## 2. Feito
 
 - [x] `.opencode/agents/{project-manager,code-reviewer,ui-designer}.md`
 - [x] `.opencode/commands/microfix.md`
-- [x] `docs/` vault (README, project, workflow, decisions, reference, cycles)
-- [x] Read + index the 102-page spec → `docs/reference/spec-map.md`
-- [x] Vocabulary → `docs/reference/glossary.md`
-- [x] Delegation basis → `docs/project/team-and-screens.md`
-- [x] Index, charter, boundaries, decisions, known-issues refreshed
+- [x] `docs/` — vault completo
+- [x] Leitura e indexação da apostila → `docs/reference/spec-map.md`
+- [x] Leitura da QTS e reindexação de todo o vault em pt-BR →
+      `docs/reference/specification.md`
+- [x] Vocabulário → `docs/reference/glossary.md`
+- [x] Base de delegação → `docs/project/team-and-screens.md`
+- [x] `README.md` da raiz com stack, telas, comandos e estado
 
-## 3. Next, in order
+## 3. Próximo, nesta ordem
 
-1. **Decide G1 + G2 + G4** (ticket `owner_id`, *fila*/queue, comments + delete
-   routes) — one decision-log block. Blocks Detalhe.
-2. **Lock the visual language** via ui-designer. Nothing renders yet; this is
-   the highest-leverage hour available.
-3. **Scaffold**: `package.json` scripts (dev/test/lint/start), `db/migrations`,
-   `db/seed`, the Step 20 routes wired thin (controllers → services →
-   repositories), error handler + correlationId.
-4. **Build the five screens**, one batch each, in dependency order:
-   Login → Novo chamado → Lista → Detalhe → Dashboard.
-   Per batch: implement → verify (`git diff --check`, boot, smoke, focused
-   tests) → visual PASS → reviewer PASS → commit.
-5. Incidental decisions as their screen arrives: G3 (status enum), G7
-   (correlationId), G8 (reopen), G9 (delete semantics), G10 (pagination).
+1. **Decidir G10** — `public/` vanilla (QTS) ou `frontend/` React. Decide a base
+   de toda a interface. Uma linha no registro de decisões.
+2. **`package.json` na raiz** com `dev`, `test`, `lint`, `start`, `migrate`,
+   `seed`, e `.env.example`. Sem isso nada roda.
+3. **Decidir G5** (rota de login) e acertar o mock em `public/js/login.js`.
+4. **Travar a linguagem visual** com o `ui-designer`.
+5. **Backend mínimo**: migrações, login com JWT + bcrypt e bloqueio de 10 min,
+   CRUD de chamados com validações, transição de status com histórico,
+   `/api/reports/summary`.
+6. **Seed** com os 12 chamados.
+7. **As cinco telas**, uma por lote: Login (integrar) → Novo chamado → Lista →
+   Detalhe → Dashboard.
+8. Decidir no caminho: G1 (fila), G2 (responsável), G4 (comentários),
+   G6 (exclusão), G7 (paginação), G8 (reabertura), G9 (limite da descrição).
 
-## 4. Open questions for the user
+## 4. Perguntas para o grupo
 
-- Middlewares at root (as now) or in `src/` (as the spec says)? One choice,
-  then consistency — `known-issues` #3.
-- Do we want `docs/` to also carry the spec-named discovery documents
-  (`01-termo-abertura.md`, `02-problema-personas.md`) for grading, or is the
-  dossier optional for us?
+- **G10 é a decisão que mais trava.** Sem ela, metade do front pode ser
+  descartada. Quem decide, e até quando?
+- `app.js` e `server.js` na raiz (como a QTS mostra) ou em `src/` (como estão)?
+- `categoria` entra como tabela, campo do chamado, ou sai? Quem faz?
+- A exclusão de chamado (RF07 da apostila) entra ou sai, já que a QTS não
+  menciona?
 
-## 5. Non-negotiables
+## 5. Inegociáveis
 
-- No unreviewed batch in a commit.
-- Every reviewer finding gets a cycle-ledger row **before** the fixing commit.
-- Assert scripted edits landed; confirm by reading the changed lines.
-- No secrets anywhere. No history rewrites.
-- A new noun enters the codebase only after `docs/reference/glossary.md` has
-  an entry for it.
+- Nenhum lote sem revisão vai para commit.
+- Todo achado ganha linha no ledger do ciclo **antes** do commit que corrige.
+- **Afirmar que a edição entrou é obrigatório; confiar cegamente no script, não.**
+  Editação roteirizada que casa com nada parece que funcionou — confirmar lendo as
+  linhas mudadas.
+- Sem segredo em lugar nenhum. Sem reescrita de histórico.
+- Substantivo novo só entra no código depois de entrar no glossário.
+- **Mock não é integração.** O mock de Login não vale como prova de que o
+  login funciona.
+- **Não tocar em `frontend/`, `thoughts/` ou no Login de `public/`** sem o
+  grupo decidir — é trabalho de outra pessoa.

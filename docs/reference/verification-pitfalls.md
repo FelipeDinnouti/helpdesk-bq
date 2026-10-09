@@ -1,29 +1,43 @@
 ---
-title: Verification pitfalls
-updated: 2026-10-02
-type: reference
-tags: [reference, verification, testing, quality]
+title: Armadilhas de verificação
+type: referencia
+updated: 2026-10-09
+tags: [referencia, verificacao, testes, qualidade]
 ---
 
-# Verification pitfalls
+# Armadilhas de verificação
 
-Adapted from tessilion's hard-won list. Theme: *a passing check is only
-evidence the thing checked passed.*
+Lista herdada do tessilion. O tema: *uma verificação que passou só é evidência
+de que aquilo que ela verificou passou.*
 
-1. **A test that cannot fail is worse than none.** Mutation-check bug-fix
-   tests (invert the fix → must fail). Assert the property at risk, not a
-   fingerprint.
-2. **Smoke ≠ visual.** Booting + 200 OK never proves a page looks right.
-   UI batches need rendered inspection or a user verdict on the exact route.
-3. **Scope negative assertions.** "Shows no X" assertions must be scoped to
-   the component/route under test.
-4. **Stubs must express the case.** A stub that can't produce the failing
-   case makes it unverified, not passing.
-5. **Excluded tests are not passing tests.** Config globs over `src/` +
-   `tests/`; never enumerate dirs. Check test counts when they drop.
-6. **Comments aren't implementation.** A comment describing a rule is not
-   evidence the rule runs. DOC findings batch silently; only load-bearing
-   prose (a reader would act wrongly) blocks.
-7. **Assert edits landed.** Scripted edits report misses; confirm by reading
-   changed lines.
-8. **Figures need source + date** or deletion. Never ship an invented number.
+1. **Um teste que não consegue falhar é pior do que nenhum.** Testes de
+   correção passam por mutação (inverter a correção → o teste tem que falhar).
+   Afirme a propriedade em risco, não a impressão digital.
+2. **Smoke ≠ visual.** Subir e dar 200 OK nunca prova que a tela está certa.
+   Lotes de interface precisam de inspeção renderizada ou veredito do usuário na
+   rota exata.
+3. **Afirmações negativas com escopo.** "Não mostra X" precisa estar limitado
+   ao componente ou rota em teste.
+4. **Stub precisa saber produzir o caso.** Um stub que não consegue produzir o
+   caso que falha deixa a coisa não verificada — e não verificada não é
+   verificada.
+5. **Teste excluído não é teste passando.** A configuração do Jest cobre `src/`
+   + `tests/` por glob; nunca enumerar diretórios. Conferir a contagem de testes
+   quando ela cai.
+6. **Comentário não é implementação.** Um comentário descrevendo uma regra não é
+   evidência de que a regra roda. Achado DOC é agrupado e não bloqueia sozinho.
+7. **Afirmar que a edição entrou.** Edições roteirizadas relatam o que não
+   casou; confirmar lendo as linhas mudadas.
+8. **Figura sem fonte e data, ou apagada.** Nunca enviar um número inventado.
+
+## Acrescentadas pela QTS
+
+9. **Mock não é integração.** A tela de Login em `public/` tem um mock do fluxo
+   autenticado que marca etapas sem chamar a API. Isso prova que o visual
+   funciona, não que o login funciona. Os dois precisam ser verificados
+   separadamente, e o segundo só depois de existir rota.
+10. **Tela sem seed parece quebrada.** Lista, Detalhe e Dashboard abrem vazios
+    sem dados de seed. Estado vazio é requisito (RF14), mas demonstração sem
+    seed esconde se a tela funciona com conteúdo.
+11. **Dois frontends no repositório.** `public/` e `frontend/` têm uma tela de
+    Login cada. Verificar a rota errada dá veredito de tela errada.

@@ -1,319 +1,244 @@
 ---
-title: Spec map — what the PDF says, and what we use
-type: reference
-status: source-of-truth
-updated: 2026-10-02
-tags: [reference, spec, pdf, index, requirements]
+title: Apostila da disciplina — índice de consulta
+type: referencia
+updated: 2026-10-09
+tags: [referencia, apostila, disciplina, requisitos, rubrica]
 ---
 
-# Spec map
+# Apostila da disciplina — índice de consulta
 
-The assignment PDF is `Apostila_Operacao_Software_Confiavel.pdf` (102 pages,
-102/102, "Operação Software Confiável — Do problema ao release", Prof. Paulo
-Elana Eloi dos Santos, ETEC Bento Quirino). Read on **2026-10-02**.
+`Apostila_Operacao_Software_Confiavel.pdf` (102 páginas, "Operação Software
+Confiável — Do problema ao release", Prof. Paulo Elana Eloi dos Santos, ETEC
+Bento Quirino). Lida em 2026-10-02. **O PDF está no `.gitignore`**, então este
+arquivo é a única referência legível a partir de um clone.
 
-**It is a course methodology handbook, not a product spec.** Five parts, 67
-numbered steps, 12 printable evidence sheets, a rubric. The actual product
-contract is scattered across Parts 01–03.
-
-> **The PDF is gitignored** (`.gitignore`), so this file is the only spec
-> reference anyone can open from a clone. Cite it carefully: if a claim here
-> matters, it had better be right.
-
-This file is the index: *what does the spec say about X*, and *are we using
-it*. Nobody has to re-read 102 pages to find out.
+> **O que este arquivo é:** um índice para *consulta rápida* da apostila.
+> **O que define o produto é** [[reference/specification]], que vem da
+> `Documentação QTS - HelpDesk.pdf`. Quando os dois divergirem, vale a QTS.
 
 ---
 
-## 1. The verdict, in one line
+## 1. O veredito, em uma linha
 
-The assignment question is *does the HelpDesk BQ release have enough quality
-to go to production?* (translated from Orientation p. 6).
+A apostila é um **manual de metodologia de curso**, não uma especificação de
+produto: cinco partes, 67 passos numerados, 12 folhas de evidência, uma rubrica.
+O contrato de produto está espalhado por oito páginas.
 
-Take the **product** (five screens, 15 functional + 8 non-functional
-requirements, the API contract, the data model, the status/priority enums).
-Ignore most of the **process** (two groups, rotating roles, per-meeting
-check-ins, double-signed gates, the 16-meeting schedule).
-
-The spec's own framing — "small enough for a class to build, rich enough to
-force real quality decisions" — is exactly right. Its ceremony is not.
-
-Worth knowing before we over-invest in polish: the rubric has **no line item
-for appearance**. The heaviest weights are implementation (20%) and test
-techniques (20%). Looks still decide how a live demo reads, but the grade does
-not reward them directly — the safest read is that a screen that looks
-finished and works beats a prettier screen that does not.
+**Tomamos o produto** (telas, RF01–RF15, RNF01–RNF08, contrato de API, modelo
+de dados, seed) **e ignoramos o processo** (dois grupos, papéis rotativos,
+cadência de encontros, gates com dupla assinatura, comitê de release). Os
+motivos estão no registro de decisões.
 
 ---
 
-## 2. Structure
+## 2. Estrutura
 
-| Part | Pages | Steps | What it is about |
+| Parte | Páginas | Passos | Assunto |
 |---|---|---|---|
-| Orientation | 1–10 | — | Journey, the challenge in one page, team split, deliverables |
-| **01 Descoberta** | 11–25 | 1–14 | Opening term, stakeholders, personas, journey, stories, backlog, **RF01–RF15**, **RNF01–RNF08**, ambiguity handling |
-| **02 Design e arquitetura** | 26–34 | 15–22 | **Low-fi prototype = the five screens**, accessibility, architecture, data model, **API contract**, threat modelling, testability |
-| **03 Construção** | 35–52 | 23–39 | Environment, repo layout, Git/review, database, Express bootstrap, routes, services, validation, UI, auth, logs, seed, unit + API tests, CI, code review, code freeze |
-| **04 Validação** | 53–71 | 40–57 | Test plan, risk-based testing, equivalence/boundary, decision tables, **state transitions**, exploratory, functional execution, integration, E2E, security, WCAG, performance, responsive, defect reporting, severity, traceability, regression |
-| **05 Qualidade e release** | 72–87 | 58–67 | ISO 25010, quality policy, audit, metrics, dashboard, quality gate, cross-audit, surprise event, release committee, AI policy, portfolio, rubric |
-| **06 Caderno de evidências** | 88–102 | Sheets 1–12 | Blank forms to print, glossary, references |
+| Orientação | 1–10 | — | Jornada, o desafio, divisão da turma, entregáveis |
+| **01 Descoberta** | 11–25 | 1–14 | Termo de abertura, stakeholders, personas, jornada, histórias, backlog, **RF01–RF15**, **RNF01–RNF08**, ambiguidade |
+| **02 Design e arquitetura** | 26–34 | 15–22 | **Protótipo = as cinco telas**, acessibilidade, arquitetura, modelo de dados, **contrato de API**, ameaças, testabilidade |
+| **03 Construção** | 35–52 | 23–39 | Ambiente, estrutura do repositório, Git/revisão, banco, bootstrap Express, rotas, serviços, validação, interface, auth, logs, seed, testes, CI, code freeze |
+| **04 Validação** | 53–71 | 40–57 | Plano de testes, risco, equivalência/limite, tabela de decisão, **transições**, exploratório, funcional, integração, E2E, segurança, WCAG, desempenho, responsividade, defeitos, rastreabilidade, regressão |
+| **05 Qualidade e release** | 72–87 | 58–67 | ISO 25010, política, auditoria, métricas, dashboard, quality gate, auditoria cruzada, release, IA, portfólio, rubrica |
+| **06 Caderno de evidências** | 88–102 | Folhas 1–12 | Formulários em branco, glossário, referências |
 
 ---
 
-## 3. What we use
+## 3. Requisitos que usamos
 
-### 3.1 Product — taken verbatim
+### 3.1 Funcionais — RF01 a RF15
 
-| # | Requirement | Screen it lands on | Primary screen's collaborator |
-|---|---|---|---|
-| RF01 | Authenticate an active user with valid credentials | Login | Login |
-| RF02 | 3 invalid attempts in 5 min → lock the account for 10 min | Login | Login |
-| RF03 | Only an authenticated user may create a ticket | Novo chamado | Novo chamado |
-| RF04 | Title 10–100 chars; description ≥ 30 | Novo chamado | Novo chamado |
-| RF05 | Priority ∈ baixa, média, alta, crítica | Novo chamado, Lista, Dashboard | Novo chamado |
-| RF06 | Requester sees own tickets; technician sees the authorised queue | Lista, Detalhe | Lista |
-| RF07 | Only admin may delete, with justification and audit | Detalhe | Detalhe |
-| RF08 | Every status / priority / owner change writes history | Detalhe | Detalhe |
-| RF09 | Filter by status and priority, alone or combined | Lista, Dashboard | Lista |
-| RF10 | Comments up to 1 000 chars on an authorised ticket | Detalhe | Detalhe |
-| RF11 | Transitions `open → analysis → in_progress → resolved → closed` | Detalhe | Detalhe |
-| RF12 | A critical ticket cannot close without a resolution comment | Detalhe | Detalhe |
-| RF13 | Report shows counts by status and priority, honouring filters | Dashboard | Dashboard |
-| RF14 | Empty state explains the absence and offers a useful action | Lista, Dashboard | Lista |
-| RF15 | API errors carry a code, a safe message and an identifier | all | PM — deliberately not a screen |
-
-| # | Non-functional requirement | How we satisfy it |
+| ID | Requisito | Tela |
 |---|---|---|
-| RNF01 | 95% of MVP responses ≤ 800 ms with 20 simulated users | measure, don't gate on it |
-| RNF02 | Usable from 360 px, no horizontal scroll | every screen, verified |
-| RNF03 | Contrast, focus and labels per WCAG 2.2 AA | every screen, verified |
-| RNF04 | Strong password hash; secrets out of the repo | `.env.example`, no real secrets |
-| RNF05 | Errors never expose stack, SQL, token or personal data | error envelope only |
-| RNF06 | ≥ 70% line coverage on the core; 100% of critical rules tested | coverage on rules, not vanity |
-| RNF07 | Structured logs: event, time, route, status, correlationId | logging middleware |
-| RNF08 | CI runs lint and tests on every pull request | workflow file |
+| RF01 | Autenticar usuário ativo com credenciais válidas | Login |
+| RF02 | Após 3 tentativas inválidas em 5 min, bloquear a conta por 10 min | Login |
+| RF03 | Somente usuário autenticado pode criar chamado | Novo chamado |
+| RF04 | Título de 10 a 100 caracteres; descrição, no mínimo 30 | Novo chamado |
+| RF05 | Prioridade baixa, média, alta ou crítica | Novo chamado, Lista, Dashboard |
+| RF06 | Solicitante vê seus chamados; técnico vê a fila autorizada | Lista, Detalhe |
+| RF07 | Somente administrador pode excluir, com justificativa e auditoria | Detalhe — **ver G7** |
+| RF08 | Toda mudança de status, prioridade ou responsável gera histórico | Detalhe — **ver G2** |
+| RF09 | Filtrar chamados por status e prioridade, isolados ou combinados | Lista, Dashboard |
+| RF10 | Permitir comentários em chamado autorizado | Detalhe — **ver G4** |
+| RF11 | Transições: aberto → em análise → em atendimento → resolvido → fechado | Detalhe |
+| RF12 | Chamado crítico não pode ser fechado sem comentário de resolução | Detalhe |
+| RF13 | Relatório mostra quantidade por status e prioridade conforme filtros | Dashboard |
+| RF14 | Estado vazio explica a ausência de dados e oferece ação útil | Lista, Dashboard |
+| RF15 | A API responde erros com código, mensagem segura e identificador | todas |
 
-### 3.2 Contract — taken verbatim, because it is already written
+> RF06, RF08 e RF10 estão **em conflito ou incompletos** frente à QTS. Ver
+> [[reference/specification]] §7.
 
-Step 20 defines the API. It is the best thing in the PDF: routes, inputs,
-outputs, the error envelope, and which status codes mean what. **We adopt it
-as-is**, which also removes an entire class of decisions.
+### 3.2 Não funcionais — RNF01 a RNF08
 
-| Method + route | Input | Output |
+| ID | Critério | Como tratamos |
 |---|---|---|
-| `POST /api/sessions` | email, password | 200 session · 401/423 safe error |
-| `POST /api/tickets` | title, description, priority | 201 ticket created |
-| `GET /api/tickets` | status?, priority? | 200 paginated list |
-| `GET /api/tickets/:id` | id | 200 detail · 403 · 404 |
-| `PATCH /api/tickets/:id/status` | status, comment? | 200 + history |
-| `GET /api/reports/summary` | filters | 200 totals or empty state |
-
-Error envelope (Step 20) and the status/message table (Passo 30):
-
-| Situation | HTTP | External message |
-|---|---|---|
-| Invalid payload | 400 | Revise os campos destacados. |
-| Unauthenticated | 401 | Autenticação necessária. |
-| No permission | 403 | Ação não autorizada. |
-| Not found | 404 | Recurso não encontrado. |
-| State conflict | 409 | Transição não permitida. |
-| Unexpected failure | 500 | Não foi possível concluir. Use o código de suporte. |
-
-Data model (Passo 19 + Passo 26 migration), `users` · `tickets` ·
-`comments` · `ticket_history` · `login_attempts`, with the `tickets` CHECK
-constraints for title length, description length and the priority enum.
-
-Seed (Passo 34): three fictional users by role
-(`admin@exemplo.local`, `tecnico@exemplo.local`, `lia@exemplo.local`) and
-**12 tickets** — 3 open, 3 analysis, 3 in progress, 2 resolved, 1 closed, with
-priorities spread. Deterministic, labelled as seed. This is our demo dataset
-and it is enough for every screen's non-empty state.
-
-### 3.3 Design rules we keep
-
-| Rule | Source | Why |
-|---|---|---|
-| One primary action per screen | Step 15 | Nothing competes for the click |
-| Messages next to the field they describe | Step 15 | Errors you have to hunt for are not read |
-| Coherent focus order; do not rely on colour alone | Step 15 | Accessibility and comprehension |
-| Test the layout at 360 px | Step 15, RNF02 | RNF02 is a requirement |
-| Semantics and layering: interface → routes/controllers → service → repository → db | Passo 17, Passo 24 | Thin controllers, testable services, injectable repository |
-| `app.js` never calls `listen`; `server.js` does | Passo 27, Passo 24 | Supertest needs the app without a port |
-| Validate at the boundary, rule in the service, stable error codes | Passo 28–30 | Single source of truth for the rules |
-| Name tests after behaviour | Passo 35 | Readable failures |
-
-### 3.4 Process — dropped
-
-Two groups and four rotating roles (Step 8, Step 40) · the 16-meeting
-schedule with check-in/check-out · double approval on gates · the pass that
-expects two signatures · the release committee timings · the surprise-event
-exercise · the printable evidence sheets as literal artefacts.
-
-Kept anyway, because it is nearly free and it is graded: commit authorship is
-visible, every batch is reviewed by someone who did not write it, no known
-defect is hidden, and the demo is reproducible from the README.
+| RNF01 | 95% das respostas em até 800 ms com 20 usuários simulados | medir, não usar como gate |
+| RNF02 | Interface utilizável a partir de 360 px sem rolagem horizontal | toda tela, verificado |
+| RNF03 | Contraste, foco e rótulos conforme WCAG 2.2 AA | toda tela, verificado |
+| RNF04 | Senhas com hash forte; segredos fora do repositório | `.env.example`, sem segredo real |
+| RNF05 | Erros não expõem stack trace, SQL, token ou dado pessoal | envelope de erro |
+| RNF06 | Cobertura de linhas ≥ 70% no núcleo; 100% das regras críticas | cobertura de regra, não de vaidade |
+| RNF07 | Logs estruturados com evento, horário, rota, status e `correlationId` | middleware de log |
+| RNF08 | CI executa lint e testes em todo pull request | arquivo de workflow |
 
 ---
 
-## 4. Lookup index — the 67 steps
+## 4. Regras de design que valem
 
-One line each, so "what did the spec say about X?" is a search, not a reread.
+| Regra | Passo | Por quê |
+|---|---|---|
+| Uma ação primária por tela | 15 | Nada disputa o clique |
+| Mensagens junto ao campo que descrevem | 15 | Erro que se precisa caçar não é lido |
+| Ordem de foco coerente; não depender só de cor | 15 | Acessibilidade e compreensão |
+| Layout testado em 360 px | 15, RNF02 | RNF02 é requisito |
+| Interface → rotas/controllers → serviço → repositório → banco | 17, 24 | Controller fino, serviço testável |
+| `app.js` não chama `listen`; `server.js` chama | 27 | Supertest precisa da app sem porta |
+| Validar na fronteira, regra no serviço, código de erro estável | 28–30 | Uma fonte de verdade |
+| Nomear testes pelo comportamento | 35 | Falha legível |
 
-### Part 01 — Descoberta (1–14)
+---
 
-| Step | Says |
+## 5. Índice de consulta — os 67 passos
+
+Uma linha cada, para "o que a apostila diz sobre X?" ser busca, não releitura.
+
+### Parte 01 — Descoberta (1–14)
+
+| Passo | Diz |
 |---|---|
-| 1 | Opening term: problem, objective, users, scope, success, risks |
-| 2 | Stakeholders and interviews; separate fact from hypothesis |
-| 3 | Personas from evidence — Lia (requester), Rafael (technician), Márcia (manager), Administrator |
-| 4 | Problem statement template; weak vs strong example |
-| 5 | User journey, current and proposed, with pain points |
-| 6 | Story mapping; the MVP must complete one journey, not accumulate half-screens |
-| 7 | User stories, "Como [papel], quero [x], para [y]"; ≥ 12 required |
-| 8 | Backlog: Must / Should / Could / Won't now |
-| 9 | **RF01–RF08** — auth, lockout, create, validation, priority enum, visibility, admin delete, history |
-| 10 | **RF09–RF15** — filters, comments, transitions, critical-close rule, report, empty state, error contract |
-| 11 | **RNF01–RNF08** — performance, responsive, a11y, secrets, safe errors, coverage, logs, CI |
-| 12 | Ambiguity is risk, not defect: list of open questions awaiting decisions |
-| 13 | Acceptance criteria as Gherkin examples for the 5 highest-risk rules |
+| 1 | Termo de abertura: problema, objetivo, usuários, escopo, sucesso, riscos |
+| 2 | Stakeholders e entrevistas; separar fato de hipótese |
+| 3 | Personas com evidência — Lia (solicitante), Rafael (técnico), Márcia (gestora), Administrador |
+| 4 | Enunciado do problema; exemplo fraco × forte |
+| 5 | Jornada do usuário, atual e proposta, com pontos de dor |
+| 6 | Story mapping; o MVP completa uma jornada, não acumula telas pela metade |
+| 7 | Histórias de usuário; mínimo 12 |
+| 8 | Backlog Must / Should / Could / Won't now |
+| 9 | **RF01–RF08** |
+| 10 | **RF09–RF15** |
+| 11 | **RNF01–RNF08** |
+| 12 | Ambiguidade é risco, não defeito: lista de perguntas em aberto |
+| 13 | Critérios de aceite como exemplos Gherkin |
 | 14 | Definition of Ready / Definition of Done |
 
-### Part 02 — Design e arquitetura (15–22)
+### Parte 02 — Design e arquitetura (15–22)
 
-| Step | Says |
+| Passo | Diz |
 |---|---|
-| **15** | **Low-fi prototype: the five screens** — Login, Lista, Novo chamado, Detalhe, Dashboard — each with required elements and one alternative state |
-| 16 | Accessibility from design: perceivable, operable, understandable, robust |
-| 17 | MVP architecture by layer, with what each layer must *not* do |
-| 18 | Component flow, where to validate, authorise, log and handle failure |
-| 19 | **Data model** — users, tickets, comments, ticket_history, login_attempts |
-| **20** | **API contract** + error envelope |
-| 21 | Light threat modelling: spoofing, tampering, repudiation, disclosure, DoS, elevation |
-| 22 | Designing for testability: observe, control, isolate, reproduce |
+| **15** | **Protótipo de baixa fidelidade: as cinco telas**, com elementos obrigatórios e um estado alternativo |
+| 16 | Acessibilidade desde o design: perceptível, operável, compreensível, robusto |
+| 17 | Arquitetura em camadas, e o que cada camada **não** deve fazer |
+| 18 | Fluxo de componentes; onde validar, autorizar, logar e tratar falha |
+| 19 | **Modelo de dados** — users, tickets, comments, ticket_history, login_attempts |
+| **20** | **Contrato da API** + envelope de erro |
+| 21 | Modelagem de ameaças leve |
+| 22 | Desenhar para testabilidade: observar, controlar, isolar, reproduzir |
 
-### Part 03 — Construção (23–39)
+### Parte 03 — Construção (23–39)
 
-| Step | Says |
+| Passo | Diz |
 |---|---|
-| 23 | Environment and npm scripts; a stranger clones and runs it in 10 minutes |
-| 24 | Repository tree; `app.js` has no `listen` |
-| 25 | Branch, commit, PR, review conventions |
-| 26 | Database migration with CHECK constraints and the filter index |
-| 27 | Express bootstrap: helmet, JSON limit, correlationId, global error handler |
-| 28 | Thin routes/controllers; never trust `requesterId` from the body |
-| 29 | Rules in the service: the transition table and `assertTransition` |
-| 30 | Validation and safe errors (the status/message table) |
-| 31 | Web UI: semantic HTML, busy button, network error handled, focus moved |
-| 32 | Authentication and authorisation; never hide a button as authorisation |
-| 33 | Structured log events; what to record and what never to record |
-| 34 | Seed data and environments — **the 12-ticket seed** |
-| 35 | Unit tests, behaviour-named, AAA visible |
-| 36 | API tests with Supertest; assert effects, not just status |
-| 37 | CI: lint + tests + audit on every PR |
-| 38 | Code review dimensions: correctness, security, design, test, data, operation |
-| 39 | Sprint review and code freeze; tag `v1.0.0-rc1` |
+| 23 | Ambiente e scripts npm; um estranho clona e roda em 10 minutos |
+| 24 | Árvore do repositório; `app.js` sem `listen` |
+| 25 | Branch, commit, pull request, revisão |
+| 26 | Migração com `CHECK` e índice de filtro |
+| 27 | Bootstrap Express: helmet, limite de JSON, `correlationId`, handler global |
+| 28 | Rotas/controllers finos; nunca confiar em `requesterId` do body |
+| 29 | Regras no serviço: tabela de transição e `assertTransition` |
+| 30 | Validação e erros seguros (tabela de status e mensagem) |
+| 31 | Interface web: HTML semântico, botão ocupado, erro de rede, foco movido |
+| 32 | Autenticação e autorização; esconder botão não é autorização |
+| 33 | Eventos de log estruturados; o que registrar e o que nunca registrar |
+| 34 | Seed e ambientes — **os 12 chamados** |
+| 35 | Testes unitários, nomeados por comportamento, AAA visível |
+| 36 | Testes de API com Supertest; afirmar efeitos, não só status |
+| 37 | CI: lint + testes + auditoria em todo PR |
+| 38 | Dimensões de revisão: correção, segurança, design, teste, dados, operação |
+| 39 | Sprint review e code freeze; tag `v1.0.0-rc1` |
 
-### Part 04 — Validação (40–57)
+### Parte 04 — Validação (40–57)
 
-| Step | Says |
+| Passo | Diz |
 |---|---|
-| 40 | Role swap after code freeze |
-| 41 | Test plan sections |
-| 42 | Risk-based testing; score = probability × impact |
-| 43 | Equivalence partitioning and boundary values (has our exact limit tables) |
-| 44 | Decision table for permissions (R1–R6) |
-| 45 | State-transition testing — the full allowed/prohibited matrix |
-| 46 | Exploratory testing with a charter |
-| 47 | Functional execution; minimum output 15 functional, 5 negative, 3 boundary, 3 API, 2 security, 2 a11y, 1 performance |
-| 48 | API, integration and persistence assertions — check the database effect |
-| 49 | E2E on the four critical journeys |
-| 50 | OWASP Top 10 / ASVS applied to scope, ethically |
-| 51 | WCAG 2.2 verification: keyboard, forms, contrast, semantics, reflow, automation |
-| 52 | Performance with a recorded environment; p95, not average |
-| 53 | Responsiveness matrix: 360×800, 768×1024, 1366×768, keyboard, three browsers |
-| 54 | Defect report fields |
-| 55 | Severity vs priority, and triage questions |
-| 56 | Traceability chain: necessity → story → requirement → code → test → defect → fix |
-| 57 | Confirmation and regression |
+| 40 | Troca de papéis após o code freeze |
+| 41 | Seções do plano de testes |
+| 42 | Teste baseado em risco; pontuação = probabilidade × impacto |
+| 43 | Partição de equivalência e valores-limite |
+| 44 | Tabela de decisão de permissões (R1–R6) |
+| 45 | **Teste de transição de estados** — matriz completa |
+| 46 | Teste exploratório com charter |
+| 47 | Execução funcional; saída mínima 15 funcionais, 5 negativos, 3 limite, 3 API, 2 segurança, 2 a11y, 1 desempenho |
+| 48 | API, integração e persistência — conferir o efeito no banco |
+| 49 | E2E nas quatro jornadas críticas |
+| 50 | OWASP Top 10 / ASVS, dentro do escopo e com ética |
+| 51 | Verificação WCAG 2.2: teclado, formulário, contraste, semântica, reflow, automação |
+| 52 | Desempenho com ambiente registrado; p95, não média |
+| 53 | Matriz de responsividade: 360×800, 768×1024, 1366×768, mais teclado e outros navegadores |
+| 54 | Campos do relatório de defeito |
+| 55 | Severidade × prioridade, e perguntas de triagem |
+| 56 | Cadeia de rastreabilidade: necessidade → história → requisito → código → teste → defeito → correção |
+| 57 | Confirmação e regressão |
 
-### Part 05 — Qualidade e release (58–67)
+### Parte 05 — Qualidade e release (58–67)
 
-| Step | Says |
+| Passo | Diz |
 |---|---|
-| 58 | ISO/IEC 25010:2023 — the nine product quality characteristics |
-| 59 | One-page quality policy |
-| 60 | Technical audit across seven areas; C / NC / OM / NA |
-| 61 | Metrics that answer a question (coverage is not quality) |
-| 62 | Executive dashboard blocks |
-| 63 | Quality gate criteria — the pre-agreed thresholds |
-| 64 | Cross audit between the two groups |
-| 65 | Surprise event — replan without hiding anything |
-| 66 | Release committee: 15 minutes, defended verdict |
-| 67 | AI as a responsible copilot; record when AI influenced an artefact |
-| — | Final portfolio and grading rubric (weights below) |
+| 58 | ISO/IEC 25010:2023 — as nove características de qualidade |
+| 59 | Política de qualidade de uma página |
+| 60 | Auditoria técnica em sete áreas; C / NC / OM / NA |
+| 61 | Métricas que respondem uma pergunta (cobertura não é qualidade) |
+| 62 | Blocos do dashboard executivo |
+| 63 | Critérios do quality gate, acordados antes do resultado |
+| 64 | Auditoria cruzada entre os dois grupos |
+| 65 | Evento surpresa — replanejar sem esconder nada |
+| 66 | Comitê de liberação: 15 minutos, parecer defendido |
+| 67 | IA como copiloto responsável; registrar quando a IA influenciou um artefato |
 
-### Part 06 — Caderno de evidências (sheets 1–12)
+### Parte 06 — Caderno de evidências (folhas 1–12)
 
-Blank printable forms: opening term · persona and journey · story and
-acceptance criteria · audited requirement · architecture decision · risk matrix
-· test case · defect report · traceability matrix · audit checklist · quality
-gate and verdict · retrospective. **Not used as artefacts**; their field sets
-are a good checklist when writing the real documents.
+Formulários em branco: termo de abertura · persona e jornada · história e
+critérios · requisito auditado · decisão de arquitetura · matriz de risco · caso
+de teste · relatório de defeito · matriz de rastreabilidade · checklist de
+auditoria · quality gate e parecer · retrospectiva. **Não usados como
+artefatos**; os campos são um bom checklist para os documentos reais.
 
-### Grading rubric (spec page 84)
+### Glossário da apostila (p. 101)
 
-| Criterion | Weight |
-|---|---|
-| Implementation | 20% |
-| Test techniques | 20% |
-| Quality and release decision | 15% |
-| Discovery and requirements | 10% |
-| Design and architecture | 10% |
-| Evidence and documentation | 10% |
-| Professional collaboration | 10% |
-| Individual reflection | 5% |
-
-Plus an individual written question (page 85): *can a system with no known
-defects be called a quality system?* — distinguishing test, QC, QA and
-quality engineering, with one example each of prevention and detection.
+Defeito · Falha · Teste · QA · QC · Risco · Severidade · Prioridade ·
+Regressão · Quality Gate · CI/CD · DevSecOps. A versão operacional, com sinônimos
+proibidos, está em [[reference/glossary]].
 
 ---
 
-## 5. Gaps and contradictions found in the spec
+## 6. Rubrica de avaliação (p. 84)
 
-Real problems we must decide, not invent silently. All of these need a line in
-[[decisions/decision-log]] before code depends on them.
+| Critério | Peso |
+|---|---|
+| Implementação | 20% |
+| Técnicas de teste | 20% |
+| Qualidade e decisão de release | 15% |
+| Descoberta e requisitos | 10% |
+| Design e arquitetura | 10% |
+| Evidência e documentação | 10% |
+| Colaboração profissional | 10% |
+| Reflexão individual | 5% |
 
-| # | Gap | Impact | Needed by |
-|---|---|---|---|
-| G1 | **`ticket.owner_id` is missing from the Passo 26 migration**, though Passo 19 lists it and RF08 requires history when the assignee changes. Passo 48 adds a third sense of *owner* — "owner do token" meaning the **requester** — so `owner` needs one definition before any of it is coded | Detalhe cannot be built | before Detalhe |
-| G2 | **"Queue" is never defined.** RF06 and Passo 44 R4/R5 depend on a technician's authorised queue; there is no queue table or column. The Dashboard's role is equally unassigned: US-10 gives the totals to *gestora*/Márcia, who maps to no seeded role, while Passo 44 R6 gives admin "administra + audita" | Permission model is unimplementable as written | before Detalhe |
-| G3 | **Two vocabularies for one enum.** RF11 says *aberto / em análise / em atendimento / resolvido / fechado*; the code says `open / analysis / in_progress / resolved / closed`; the seed repeats the prose. Never mapped in the spec. | UI ↔ DB drift | **resolved** — 1:1 map written in glossary §3b |
-| G4 | **No comments endpoint.** RF10 and the Detalhe screen need comments; Step 20 defines none. Also no `DELETE` route for RF07. | Two screens are half-built | before Detalhe |
-| G5 | **`priority` means two things** — ticket priority (RF05) and defect priority (Passo 55) | Ambiguous code and docs | resolved in glossary §2 |
-| G6 | **`requester_id` vs. "common user" vs. "solicitante"** — one role, three names in the spec | Vocabulary drift | resolved in glossary §2 |
-| G7 | **Two `correlationId` formats** — `req_7f31…` in the samples, raw `crypto.randomUUID()` in the Passo 27 code | Log search breaks | before logs |
-| G8 | **Reopen is undecided.** Passo 29 permits `resolved → in_progress` for any authorised caller; Passo 12 asks who may reopen a *closed* ticket and within what deadline | Untestable rule | before Detalhe |
-| G9 | **Deletion is undecided** — physical, logical, or auditable archive? (Passo 12 asks, RF07 assumes yes) | RF07 untestable | before Detalhe |
-| G10 | **Pagination size and ordering unspecified.** Passo 20 says "paginated list" and Passo 48 asserts "paginação e ordenação", but no page size, default order or tiebreaker is ever given — the spec leaves it entirely open | Two collaborators will pick differently | before Lista |
-| G11 | **Description ceiling of 5 000** appears only in the Passo 30 Zod sample, not in RF04 | Unsourced limit | note it, adopt it |
+**Não existe linha de aparência.** Os pesos mais altos são implementação e
+técnica de teste. Aparência decide como a demonstração ao vivo é lida, não a
+nota — a leitura segura é que uma tela que parece acabada **e funciona** vence
+uma tela mais bonita que não funciona.
 
----
-
-## 6. Structure delta — spec vs this repo
-
-| Spec expects | This repo | Action |
-|---|---|---|
-| `src/middlewares/` | `middlewares/` at root | Decide once, then be consistent. Root-level is the existing choice. |
-| `evidencias/`, `qualidade/` dirs | absent | Skip — evidence lives with `docs/`, metrics in the cycle ledger |
-| `/docs/01-termo-abertura.md`, `/docs/02-problema-personas.md` | `docs/` holds workflow docs | Write the real documents when the discovery batch comes |
-| PDF at repo root | present | Keep — it is the assignment, not our code |
+Além da rubrica, há uma pergunta individual (p. 85): *um sistema sem defeitos
+conhecidos pode ser considerado um sistema de qualidade?* — diferenciando teste,
+QC, QA e engenharia da qualidade, com um exemplo de prevenção e um de detecção.
 
 ---
 
-## Related
+## Relacionados
 
-- [[reference/glossary]] — the vocabulary this file uses
-- [[project/team-and-screens]] — who owns which screen
-- [[reference/known-issues]] — status of G1–G11
-- [[decisions/decision-log]] — where the decisions land
+- [[reference/specification]] — a QTS, que define o produto
+- [[reference/glossary]] — vocabulário operacional
+- [[reference/known-issues]] — lacunas em aberto
+- [[decisions/decision-log]] — o que foi adotado e o que foi deixado de fora

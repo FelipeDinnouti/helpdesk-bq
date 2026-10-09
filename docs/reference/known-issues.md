@@ -1,43 +1,54 @@
 ---
-title: Known issues
-type: reference
-updated: 2026-10-02
-tags: [reference, issues]
+title: Lacunas conhecidas
+type: referencia
+updated: 2026-10-09
+tags: [referencia, problemas, lacunas]
 ---
 
-# Known issues
+# Lacunas conhecidas
 
-Deferred items, follow-ups, open questions. One row each with status.
+Itens em aberto, decisões pendentes e perguntas sem dono. Uma linha cada, com
+situação.
 
-## Open decisions from the spec
+## 1. Lacunas entre a QTS, a apostila e o repositório
 
-The gaps the assignment PDF leaves open, extracted in
-[[reference/spec-map]] §5. Each needs a decision-log line before code depends
-on it — none may be invented silently.
+Detalhadas em [[reference/specification]] §7.
 
-| # | Gap | Blocks | Status |
+| # | Lacuna | Bloqueia | Situação |
 |---|---|---|---|
-| G1 | `ticket.owner_id` missing from the Passo 26 migration although RF08 needs it; Passo 48 uses *owner* a third time, for the requester ("owner do token") | Detalhe | open — decide with G2 |
-| G2 | "Queue" / *fila* never defined, yet RF06 and Passo 44 depend on it. **Dashboard role unassigned:** US-10 gives the totals to *gestora*/Márcia, who maps to no seeded role; Passo 44 R6 gives admin "administra + audita" | Detalhe **and** Dashboard | open — decide with G1 |
-| G3 | Status enum exists in two vocabularies (prose pt-BR vs code enum) | Lista | **resolved** — map written in glossary §3b (1:1 from RF11/Passo 29/Passo 34) |
-| G4 | No comments endpoint (RF10) and no delete route (RF07) in Step 20 | Detalhe | open — needs a contract addition + decision-log line |
-| G5 | `priority` collides: ticket priority vs defect priority | — | **resolved** in glossary §2 (qualified names) |
-| G6 | `requester_id` / "common user" / "solicitante" are one role with three names | — | **resolved** in glossary §2 (`requester` canonical) |
-| G7 | Two `correlationId` formats: `req_7f31…` sample vs raw UUID in the Passo 27 code | logs | open — pick one |
-| G8 | Reopen of a closed ticket: who, and within what deadline | Detalhe | open — Passo 12 asks, Passo 29 code implies otherwise |
-| G9 | Deletion semantics: physical, logical, or auditable archive | Detalhe | open — Passo 12 asks, RF07 assumes it exists |
-| G10 | Pagination size and ordering unspecified | Lista | open — two people would guess differently |
-| G11 | Description ceiling of 5 000 exists only in the Passo 30 Zod sample | Novo chamado | open — adopt and note, or drop |
+| G1 | **`fila` / queue não é definida.** A QTS diz que o técnico "visualiza a fila para a qual possui autorização", mas não há tabela, coluna ou regra | Lista, Detalhe | **aberto — precisa de decisão do grupo** |
+| G2 | **Os documentos divergem sobre responsável técnico.** A apostila exige histórico quando o responsável muda e lista `owner_id`; a QTS não menciona responsável e lista as migrações sem ele | Detalhe | **aberto** |
+| G3 | **`categoria` é entidade nova da QTS**, ausente na apostila. Nenhuma tela da QTS lista categoria como campo | Detalhe, migrações | **aberto** |
+| G4 | **Não existe endpoint de comentários.** A tela Detalhe exige comentar e há migração de comentários, mas a QTS só nomeia `/api/reports/summary` | Detalhe | **aberto** |
+| G5 | **A rota de login não está travada.** A QTS não nomeia nenhuma. A apostila propõe `POST /api/sessions`; o plano em `thoughts/` e um comentário `TODO(back)` em `public/js/login.js` sugerem `POST /api/auth/login` | integração front/back | **aberto** |
+| G6 | **`categoria` não tem dono.** A divisão de trabalho da QTS não lista ninguém para a tabela; o plano em `thoughts/` não a menciona | — | **aberto** |
+| G7 | **Exclusão de chamado:** a apostila exige (RF07, só admin, com justificativa e auditoria); a QTS não menciona | Detalhe | **aberto — entra ou sai do escopo** |
+| G8 | **Paginação e ordenação nunca especificadas.** A QTS diz "navegar pelos resultados"; a apostila fala em lista paginada. Nem tamanho de página, nem ordem padrão, nem desempate | Lista, Dashboard | **aberto** |
+| G9 | **`app.js` e `server.js`:** a QTS põe na raiz; o repositório tem em `src/` (e a apostila também) | estrutura | **aberto** |
+| G10 | **`frontend/` é React 19 + Vite**, mas a QTS especifica HTML/CSS/JS servidos de `public/`, com justificativa explícita. As duas versões da tela Login chegaram no mesmo PR #1 | arquitetura do front | **aberto — maior decisão pendente** |
+| G11 | **Formato do `correlationId`:** apostila Passo 20/33 usa `req_7f31…`; Passo 27 usa `crypto.randomUUID()` cru | logs, RNF07 | **aberto** |
+| G12 | **Nome do repositório / branch de trabalho.** A QTS desenha `HELPDESK-BQ-MAIN/`; o repositório é `helpdesk-bq` e há branches em uso | organização | **aberto, baixo impacto** |
 
-## Project
+## 2. Itens do projeto
 
-| # | Item | Status |
+| # | Item | Situação |
 |---|---|---|
-| 1 | Visual language not yet established (highest-leverage early task) | open |
-| 2 | Test setup in `tests/` empty (`.gitkeep` only) | open |
-| 3 | `middlewares/` at repo root vs the spec's `src/middlewares/` | open — decide once, be consistent |
-| 4 | `evidencias/` and `qualidade/` dirs from the spec not created | closed — skipped by decision, evidence lives in `docs/` |
-| 5 | ui-designer has never inspected a rendered surface (there is no UI yet) | open — first task of the build phase |
-| 6 | G1+G2+G4 together block the Detalhe screen, which is the most complex of the five | open — highest-leverage decision remaining |
+| 1 | **A tela de Login existe** (`public/login.html` + CSS + JS) com mock do fluxo e um comentário `TODO(back)` com o `fetch` sugerido | feito visualmente, **não integrado** |
+| 2 | **Não existe `package.json` na raiz** — a QTS exige que o README traga instruções de execução, e não há como rodar nada ainda | **aberto — bloqueia tudo** |
+| 3 | Backend é esqueleto: `src/app.js` e `src/server.js` são comentários; rotas, controller, service e middleware são placeholders | **aberto** |
+| 4 | Banco inexistente: `db/migrations/` só tem `.gitkeep` | **aberto** |
+| 5 | Nenhum teste. `tests/` só tem `.gitkeep` | **aberto** |
+| 6 | Linguagem visual **não estabelecida** — é a tarefa de design de maior alavancagem antes das outras quatro telas | **aberto** |
+| 7 | Sem seed de demonstração. Sem ele, Login→Lista→Detalhe→Dashboard aparecem vazios na apresentação | **aberto** |
+| 8 | `public/js/login.js` sugere `/api/auth/login` num comentário `TODO(back)`; nada em execução aponta para lá | aberto, dependente de G5 |
+| 9 | O `frontend/README.md` é o boilerplate do Vite em inglês, não do projeto | aberto, pertence a quem fez |
 
-*Scaffolded 2026-10-02. Spec read and indexed 2026-10-02.*
+## 3. Descartado de propósito
+
+| Item | Motivo |
+|---|---|
+| Diretórios `evidencias/` e `qualidade/` | evidência mora em `docs/`, métricas no ledger de ciclo |
+| Processo da apostila (dois grupos, papéis rotativos, cadência de encontros) | decisão de 2026-10-02 |
+| `docs/reference/verification-pitfalls.md` em inglês | **revertido** — traduzido para pt-BR em 2026-10-09, conteúdo mantido |
+
+*Scaffold em 2026-10-02. Apostila lida em 2026-10-02. QTS lida em 2026-10-09.*

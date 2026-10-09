@@ -1,133 +1,123 @@
 ---
-title: Glossary and controlled vocabulary
-type: reference
-status: source-of-truth
-updated: 2026-10-02
-tags: [reference, glossary, vocabulary, naming]
+title: Glossário e vocabulário controlado
+type: referencia
+status: fonte-da-verdade
+updated: 2026-10-09
+tags: [referencia, glossario, vocabulario, nomenclatura]
 ---
 
-# Glossary and controlled vocabulary
+# Glossário e vocabulário controlado
 
-**This file is the naming contract for the whole project.** Before writing
-code, a screen, a test, a document or a commit message, look up the concept
-here. If a word is not listed, either it is ordinary English/Portuguese prose
-or you have found a vocabulary gap — raise it, don't invent a third word.
+**Este arquivo é o contrato de nomenclatura do projeto.** Antes de escrever
+código, tela, teste, documento ou mensagem de commit, consulte o conceito aqui.
+Se a palavra não está na lista, ou é prosa comum, ou você encontrou uma lacuna
+de vocabulário — resolva, não invente uma terceira palavra.
 
-Derived from `Apostila_Operacao_Software_Confiavel.pdf` (102 pages, 67 steps,
-12 evidence sheets), which itself ends with a *Glossário essencial*. This file
-is the operational version: same spirit, plus the **canonical term**, the
-**banned synonyms**, and the **per-surface spelling**.
+Fontes:
 
----
-
-## 1. The seven rules
-
-1. **One concept, one canonical term.** Every competing word is either a
-   declared alias (§3) or banned (§4). Never two live terms for one thing.
-2. **Code surface speaks code.** Identifiers — table, column, route, enum
-   value, log event, test name, file name — use the canonical term in ASCII
-   `snake_case` (or `kebab-case` in URLs). Never translated, never pluralised
-   inconsistently.
-3. **Display surface speaks pt-BR.** A user-visible string may use the
-   declared pt-BR label (§3). Display strings live in exactly one place per
-   surface; they are never reused as identifiers.
-4. **Collisions get qualified names.** `ticket.priority` and
-   `defect.priority` are different things and are always written qualified.
-   Same for `ticket.owner` (a person) vs. any task owner (never "owner" for a
-   person — see §2).
-5. **IDs are the connective tissue.** One stable ID per artefact, prefixed by
-   kind, never reused and never renumbered (§5). A chain
-   *necessity → story → requirement → code → test → defect → fix* links by ID
-   alone, with no prose.
-6. **Never translate mid-chain.** If the ticket is `ticket` in the schema, it
-   is `ticket` in the route, the service, the test and the log event. Mixed
-   language inside one chain is a defect in the vocabulary, not a style choice.
-7. **A term not in this file may not enter an identifier.** New noun → new
-   entry here first, with its banned synonyms.
+- **`Documentação QTS - HelpDesk.pdf`** — fonte da verdade sobre *o que o
+  sistema faz*.
+- `Apostila_Operacao_Software_Confiavel.pdf` — material da disciplina; fonte de
+  requisitos complementares e da rubrica.
 
 ---
 
-## 2. The core nouns
+## 1. As sete regras
 
-`ticket` is the canonical word for the ticket concept. Every project surface
-below is derived from it.
+1. **Um conceito, um termo canônico.** Toda palavra concorrente é um apelido
+   declarado (§3) ou está banida (§4). Nunca dois termos vivos para a mesma
+   coisa.
+2. **A superfície de código fala inglês.** Identificadores — tabela, coluna,
+   rota, valor de enum, evento de log, nome de teste, nome de arquivo — usam o
+   termo canônico em ASCII `snake_case` (ou `kebab-case` em URL). Nunca
+   traduzidos.
+3. **A superfície de exibição fala pt-BR.** Uma string visível ao usuário pode
+   usar o rótulo pt-BR declarado (§3). Strings de exibição ficam em um único
+   lugar por superfície e nunca são reaproveitadas como identificador.
+4. **Colisões ganham nome qualificado.** `ticket.priority` e
+   `defect.priority` são coisas diferentes e sempre qualificados.
+5. **IDs são o fio condutor.** Um ID estável por artefato, prefixado pelo tipo,
+   nunca reutilizado nem renumerado (§5). A cadeia
+   *necessidade → história → requisito → código → teste → defeito → correção*
+   se liga só por ID, sem prosa.
+6. **Nunca traduza no meio da cadeia.** Se o chamado é `ticket` no esquema, é
+   `ticket` na rota, no serviço, no teste e no evento de log.
+7. **Termo fora deste arquivo não entra em identificador.** Nome novo → entrada
+   aqui primeiro, com sua lista de proibições.
 
-| Concept | Canonical term | Definition (one line, per spec) | Not this |
+---
+
+## 2. Os substantivos centrais
+
+`ticket` é a palavra canônica do conceito de chamado.
+
+| Conceito | Termo canônico | Definição (por linha, conforme a QTS) | Não use |
 |---|---|---|---|
-| Ticket | **`ticket`** | A request for help, created by a requester, moved through a fixed status path by a technician, with history. | *chamado, registro, issue, ocorrência, solicitação, demanda, pedido* |
-| User account | **`user`** | An identity with one role, an e-mail and a password hash; may be blocked. | *conta, cliente, usuário do sistema* |
-| Role | **`role`** | One of `requester`, `technician`, `admin` — decides which rules apply. | *perfil, grupo, nível, tipo de usuário* |
-| Requester | **`requester`** (`requester_id`) | The user who opened the ticket. Owns nothing after opening. | *solicitante, cliente, dono do ticket, autor, criador, reclamante* |
-| Technician | **`technician`** | The user who triages, comments and changes status. | *atendente, suporte, opener, worker* |
-| Administrator | **`admin`** | The user who manages roles/categories and deletes with justification. | *superusuário, root, gestor do sistema* |
-| Ticket assignee | **`owner`** (`owner_id`) | The technician responsible for the ticket right now. | *assignee, responsável pelo atendimento, atendente, dono* |
-| Ticket status | **`status`** | One of `open`, `analysis`, `in_progress`, `resolved`, `closed`. Labels in §3b. | *situação, estado, fase, etapa* |
-| Ticket priority | **`priority`** | One of `low`, `medium`, `high`, `critical`. Labels in §3b. | *urgência (wrong: that is defect priority), gravidade, nível* |
-| Comment | **`comment`** | Up to 1 000 characters by an authorised user, attached to one ticket. | *mensagem, nota, resposta, observação, reply* |
-| History entry | **`history`** | Immutable row: actor, timestamp, action, before value, after value. | *log, auditoria, rastro* — **these are different things, see §4** |
-| Audit entry | **`audit`** | A record of a *privileged* action (delete, role change) for accountability. | *log, histórico* |
-| Log entry | **`log entry`** | A structured operational record: event, time, route, status, correlation id. | *histórico, auditoria, relatório* |
-| Correlation id | **`correlationId`** | One id tying a user-visible failure to its log lines. | *requestId, traceId (no), id da requisição* |
-| Screen | **`screen`** | One of five user-facing surfaces: login, list, new-ticket, detail, dashboard. | *página, view, rota (a route is not a screen), tela do banco* |
-| Collaborator | **`collaborator`** | One of the five people building the project. | *aluno, membro, dev, participante, autor* |
-| Collaborator's assignment | **`colaborador responsável por <Screen>`** | The person responsible for one screen end to end. Never abbreviated to "owner". | *owner, responsável pelo módulo, Maintainer* |
-| Evidence file | **`evidence`** | A committed artefact that proves a claim: capture, log, export, report. | *print, anexo, foto, arquivo* |
-| Quality gate | **`quality gate`** | Objective criteria agreed *before* the result, that authorise advancing or releasing. | *checkpoint, milestone, gate de homologação, rubrica* |
-| Defect | **`defect`** | Divergence from an approved reference, reproducible. | *bug, erro, falha (falha is the symptom), problema, pendência* |
-| Failure | **`failure`** | The observed behaviour that a defect produces. | *erro, exceção, crash, defeito* |
-| Defect severity | **`severity`** | Technical/user impact of a defect: `critical`, `high`, `medium`, `low`. | *prioridade, gravidade do produto* |
-| Defect priority | **`defect.priority`** | Urgency of treatment in the context of this release. | *severidade, urgência (write *urgência* only in prose)* |
-| Requirement | **`requirement`** | A verifiable statement, `RF01`–`RF15` or `RNF01`–`RNF08`. | *história, especificação, tarefa, regra* |
-| User story | **`story`** | Value statement in *Como [papel], quero [capacidade], para [benefício]*, `US-01`–. | *requisito, user story (write *história de usuário* in prose only)* |
-| Test case | **`test case`** | A reproducible verification with id `CT-001`–, one requirement, one main reason to fail. | *teste (bare), cenário, caso, suite* |
-| Risk | **`risk`** | `probability (1–5) × impact (1–5)`, guiding test depth. Distinct from defect severity. | *probabilidade, severidade, impacto (bare)* |
-| Sprint / cycle | **`cycle`** | A batch of work: implement → verify → review → commit. | *iteração, sprint (use *sprint* only for the class meeting)* |
-| Slice | **`slice`** | The smallest coherent unit of change inside a batch. | *tarefa, story, PR* |
+| Chamado | **`ticket`** | Solicitação de suporte registrada por um solicitante, movida por um técnico numa sequência de status controlada, com histórico. | *chamado (em código), registro, issue, ocorrência, demanda, pedido* |
+| Conta de usuário | **`user`** | Identidade com um perfil, um e-mail e um hash de senha; pode ser bloqueada. | *conta (em código), cliente* |
+| Perfil | **`role`** | Um entre `requester`, `technician`, `admin` — decide quais regras se aplicam. | *perfil (em código), grupo, nível, tipo de usuário* |
+| Solicitante | **`requester`** (`requester_id`) | Quem abriu o chamado. É o "usuário comum / solicitante" da QTS. | *cliente, dono do ticket, autor, criador, reclamante* |
+| Técnico | **`technician`** | Quem consulta a fila autorizada, prioriza, comenta e altera o status. | *atendente, suporte, opener* |
+| Administrador | **`admin`** | Quem administra permissões e categorias e executa ações administrativas registradas no histórico. | *superusuário, root, gestor do sistema* |
+| Categoria | **`category`** (`category_id`) | Classificação do chamado; administrada pelo `admin`. **Novo em relação à apostila** — ver §6. | *tipo, grupo, etiqueta, tag* |
+| Status do chamado | **`status`** | `open`, `analysis`, `in_progress`, `resolved`, `closed`. Rótulos em §3b. | *situação, estado, fase, etapa* |
+| Prioridade do chamado | **`priority`** | `low`, `medium`, `high`, `critical`. Rótulos em §3b. | *urgência (isso é prioridade de defeito), gravidade* |
+| Comentário | **`comment`** | Texto do atendimento, por usuário autorizado, em um chamado. | *mensagem, nota, resposta, observação* |
+| Entrada de histórico | **`history`** | Linha imutável: autor, data, ação, valor anterior, valor novo. | *log, auditoria* — **são coisas diferentes** |
+| Entrada de auditoria | **`audit`** | Registro de uma ação privilegiada (permissões, categorias). | *log, histórico* |
+| Entrada de log | **`log entry`** | Registro operacional estruturado: evento, horário, rota, status, `correlationId`. | *histórico, auditoria, relatório* |
+| ID de correlação | **`correlationId`** | ID que liga uma falha visível ao usuário aos seus registros de log. | *requestId, traceId, id da requisição* |
+| Tela | **`screen`** | Uma das cinco superfícies: Login, Lista, Novo chamado, Detalhe, Dashboard. | *página, view, rota (rota não é tela), tela do banco* |
+| Colaborador | **`collaborator`** | Uma das cinco pessoas que constroem o projeto. | *aluno, membro, dev, participante, autor* |
+| Atribuição do colaborador | **`colaborador responsável por <Tela>`** *(só em prosa — nunca em identificador)* | A pessoa responsável por uma tela, do início ao fim. Nunca abreviado para "owner". | *owner, responsável pelo módulo, Maintainer* |
+| Evidência | **`evidence`** | Artefato versionado que prova uma afirmação: captura, log, relatório. | *print, anexo, foto* |
+| Quality gate | **`quality gate`** | Critérios objetivos acordados *antes* do resultado, que autorizam avançar ou liberar. | *checkpoint, milestone* |
+| Defeito | **`defect`** | Divergência em relação a uma referência aprovada, reproduzível. | *bug, erro, falha (falha é o sintoma), problema* |
+| Falha | **`failure`** | Comportamento observado diferente do esperado. | *erro, exceção, crash, defeito* |
+| Severidade do defeito | **`severity`** | Impacto técnico/do usuário: `critical`, `high`, `medium`, `low`. | *prioridade* |
+| Prioridade do defeito | **`defect.priority`** | Urgência de tratamento neste ciclo. | *severidade* |
+| Requisito | **`requirement`** | Afirmação verificável, `RF01`–`RF15` ou `RNF01`–`RNF08`. | *história, especificação, tarefa, regra* |
+| História de usuário | **`story`** | *Como [papel], quero [capacidade], para [benefício]* — `US-01`–. | *requisito, história (em código), tarefa* |
+| Caso de teste | **`test case`** | Verificação reproduzível com id `CT-001`–, um requisito, um motivo principal de falha. | *teste (isolado), cenário, caso, suíte* |
+| Risco | **`risk`** | `probabilidade (1–5) × impacto (1–5)`, guia a profundidade dos testes. | *probabilidade, severidade* |
+| Ciclo | **`cycle`** | Um lote de trabalho: implementar → verificar → revisar → commitar. | *iteração* |
+| Fatia | **`slice`** | A menor unidade coerente de mudança dentro de um lote. | *tarefa, story, PR* |
 
-Identifiers stay **bare** (`priority`, `owner`) because the table or type name
-supplies the context — exactly as the spec writes `tickets.priority`. Rule 4's
-qualified form (`ticket.priority`, `defect.priority`) is for **prose**, where
-both senses can appear in one sentence.
+### Palavras *de carga* que nunca devem ser usadas de forma solta
 
-### Words that are *load-bearing* and must never be used loosely
+- **`owner`** — apenas `ticket.owner_id`. **Atenção:** a QTS **não** menciona
+  responsável técnico pelo chamado; ver §6. Nunca "o owner da tela Lista".
+- **`priority`** — sempre `ticket.priority` ou `defect.priority`.
+- **`history`** — o registro-oficial do chamado. Uma entrada de log não é
+  histórico.
+- **`fila` / `queue`** — ver §6, indefinido na QTS.
+- **`critical`** — valor de `ticket.priority` **e** de `severity`. Diga qual.
+- **`categoria`** — substantivo novo introduzido pela QTS. Em código,
+  `category`.
 
-- **`owner`** — only `ticket.owner_id` the technician on a ticket. An
-  owner change lands in `ticket_history` as a `before`/`after` pair (RF08), not as
-  a column. Never "the owner of the list screen".
-- **`priority`** — always `ticket.priority` or `defect.priority`.
-- **`history`** — the ticket's audit-of-record. A log entry is *not* history.
-- **`queue`** — see §6, unresolved in the spec.
-- **`critical`** — a `ticket.priority` value *and* a `severity` value. Say
-  which one.
+Identificadores ficam **sem qualificação** (`priority`, `owner`) porque o nome da
+tabela ou do tipo já dá o contexto — exatamente como a apostila escreve
+`tickets.priority`. A forma qualificada da regra 4 (`ticket.priority`,
+`defect.priority`) é para **prosa**, onde os dois sentidos podem aparecer na
+mesma frase.
 
 ---
 
-## 3. Declared aliases (the only legal exceptions)
+## 3. Apelidos declarados (as únicas exceções legais)
 
-Exactly two aliases exist. Both are **surface-bound** and must not leak.
+### 3a. `ticket` → **"chamado"** (exibição e prosa)
 
-### 3a. `ticket` → **"chamado"** (pt-BR display + prose)
-
-The spec is Portuguese, the reviewers are Brazilian, and the spec's own product
-language is "chamado". So:
-
-| Surface | Spelling |
+| Superfície | Grafia |
 |---|---|
-| Tables, columns, enums, routes, log events, test names, file names | `ticket`, `tickets`, `requester_id`, `ticket_history`, … |
-| User-visible pt-BR strings | **Chamado**, **Novo chamado**, **Lista de chamados**, **Chamados por status** |
-| Human-readable doc prose | `ticket` or *chamado*, first use per file then `ticket` |
+| Tabelas, colunas, enums, rotas, eventos de log, nomes de teste, arquivos | `ticket`, `tickets`, `requester_id`, `category_id`, … |
+| Strings visíveis ao usuário | **Chamado**, **Novo chamado**, **Lista de chamados**, **Detalhe do chamado** |
+| Prosa em documentos | `ticket` ou *chamado* |
 
-**Forbidden:** mixing the two inside one chain — a `chamado` route, a
-`ticket` column comment that calls it a "registro", a UI label "Ticket #12" in
-a pt-BR product.
+**Proibido:** misturar as duas dentro de uma mesma cadeia.
 
-### 3b. Status and priority: enum value, display label
+### 3b. Status, prioridade e perfil: enum, rótulo
 
-One map, three surfaces, no drift. The enum column is canonical and is what
-appears in code, the database, the API and log events. The label column is the
-pt-BR display string only.
-
-| Field | Enum value (code, DB, API) | Display label (pt-BR) |
+| Campo | Valor no código, banco e API | Rótulo exibido (pt-BR) |
 |---|---|---|
 | `status` | `open` | Aberto |
 | `status` | `analysis` | Em análise |
@@ -138,118 +128,113 @@ pt-BR display string only.
 | `priority` | `medium` | Média |
 | `priority` | `high` | Alta |
 | `priority` | `critical` | Crítica |
-| `role` | `requester` | Solicitante |
+| `role` | `requester` | Usuário comum / solicitante |
 | `role` | `technician` | Técnico |
 | `role` | `admin` | Administrador |
 
-Transcribed 1:1 from RF05, RF11, Passo 29's transition table and Passo 34's
-seed breakdown — the spec states both forms and never maps them. That mapping
-is this table, and nothing else is permitted. Closes gap **G3**.
+A QTS escreve apenas a coluna de rótulos ("Aberto → Em análise → Em
+atendimento → Resolvido → Fechado"; "baixa, média, alta ou crítica"). A
+coluna de enum vem da apostila. O mapeamento é 1:1 e esta tabela é a única
+autorizada.
 
-### 3c. Screens keep their spec names
+### 3c. As cinco telas
 
-Step 15 names five screens. Those names are canonical in every surface.
-
-| Screen id | Canonical name (code + docs) | pt-BR display label |
+| ID da tela | Nome canônico | Rótulo exibido |
 |---|---|---|
-| `login` | **Login** | Entrar |
+| `login` | **Login** | Entrar no sistema |
 | `list` | **Lista** | Lista de chamados |
 | `new-ticket` | **Novo chamado** | Novo chamado |
 | `detail` | **Detalhe** | Detalhe do chamado |
-| `dashboard` | **Dashboard** | Dashboard |
+| `dashboard` | **Dashboard** | Dashboard / Relatórios |
 
-**Which form goes where:** the **id** (`login`, `new-ticket`) in file names,
-routes and test names — ASCII, always. The **name** (*Login*, *Novo chamado*)
-in prose, headings and user-visible labels. Never `novo-chamado.html` when
-the id is `new-ticket`.
+> A QTS usa "Tela de Detalhes do Chamado" no item 4 e "Detalhe do chamado" na
+> lista introdutória. **Adotamos "Detalhe"** como nome curto canônico e
+> "Detalhe do chamado" como rótulo exibido.
 
-Addressing a person about a screen: **"colaborador responsável por <Screen>"** — e.g. *"o colaborador responsável por Dashboard
-confirmou o estado vazio"*. Never *"o owner do dashboard"*.
+**Qual forma vai onde:** o **ID** (`login`, `new-ticket`) em nomes de arquivo,
+rotas e nomes de teste — sempre ASCII. O **nome** (*Login*, *Novo chamado*) em
+prosa, títulos e rótulos visíveis. Nunca `detalhe.html` quando o ID é `detail`.
 
----
-
-## 4. Banned words
-
-Never write these. If one seems needed, the concept is missing from §2.
-
-`registro` · `issue` · `ocorrência` · `solicitação` · `demanda` · `atendente`
-· `suporte` · `cliente` · `criador` · `autor do chamado` · `mensagem` (for
-comment) · `nota` · `situação` (for status) · `gravidade` (for severity) ·
-`erro` (for defect) · `bug` (in prose; `BUG-` as a defect **id** is fine) ·
-`log` (for history) · `auditoria` (for history) · `página` / `view` (for
-screen) · `aluno` / `membro` / `dev` (for collaborator) · `owner` (for a
-person) · `tarefa` (for slice) · `histórico de auditoria` (neologism).
+**Como endereçar:** **"colaborador responsável por <Tela>"** — por exemplo
+*"o colaborador responsável por Dashboard confirmou o estado vazio"*. Nunca
+*"o owner do dashboard"*.
 
 ---
 
-## 5. Identifier conventions
+## 4. Palavras banidas
 
-Ids come from the spec (Passo 25 branch/commit examples, Passo 47, p. 10
-filename example). One ID per artefact, stable forever, never reused.
+`registro` · `issue` · `ocorrência` · `demanda` · `pedido` · `atendente` ·
+`suporte` · `cliente` · `criador` · `autor do chamado` · `mensagem` (para
+comentário) · `nota` · `situação` (para status) · `gravidade` (para
+severidade) · `erro` (para defeito) · `log` (para histórico) · `auditoria`
+(para histórico) · `página` / `view` (para tela) · `aluno` / `membro` / `dev`
+(para colaborador) · `owner` **e `dono`** (para pessoa) · `designer` (para
+colaborador) · `tarefa` (para fatia).
 
-| Kind | Pattern | Range in this project |
+A tradução não escapa da regra: proibir uma palavra em inglês é proibir a ideia em
+qualquer idioma.
+
+O verbo *responsável* e *possui* são permitidos ("responsável por uma tela");
+a forma proibida é o **substantivo** `owner` aplicado a uma pessoa.
+
+---
+
+## 5. Convenções de identificadores
+
+| Tipo | Padrão | Escopo neste projeto |
 |---|---|---|
-| User story | `US-nn` | `US-01` … (spec requires ≥ 12) |
-| Functional requirement | `RFnn` | `RF01`–`RF15` (spec, Passo 9–10) |
-| Non-functional requirement | `RNFnn` | `RNF01`–`RNF08` (spec, Passo 11) |
-| Test case | `CT-nnn` | `CT-001` … (spec uses `CT-014`) |
-| Defect | `BUG-nnn` | `BUG-001` … (spec uses `BUG-007`) |
-| Evidence | `EV-nnn` | introduced here; evidence files are named per §5b |
-| Git branch | `feat/US-04-criar-chamado`, `fix/BUG-007-status` | spec, Passo 25 |
-| Commit | `feat(ticket): valida título e descrição` | conventional commit + scope |
-| Release tag | `v1.0.0-rc1` | spec, Passo 39 |
+| História de usuário | `US-nn` | `US-01` … |
+| Requisito funcional | `RFnn` | `RF01`–`RF15` (apostila, Passo 9–10) |
+| Requisito não funcional | `RNFnn` | `RNF01`–`RNF08` (apostila, Passo 11) |
+| Caso de teste | `CT-nnn` | `CT-001` … |
+| Defeito | `BUG-nnn` | `BUG-001` … |
+| Branch | `feat/US-04-novo-chamado`, `fix/BUG-007-status` | apostila, Passo 25 |
+| Commit | `feat(ticket): valida título e descrição` | conventional commit + escopo |
 
-### 5b. Evidence file names
+### 5b. Nomes de arquivo de evidência
 
-`AAAA-MM-DD_Tipo_ID_Descricao.ext` — from *Entregáveis e convenção de
-arquivos*, Orientation **p. 10** (not Step 10). The spec offers two examples,
-`Teste` and `Defeito`; the value list below is **introduced here**, and it is
-closed:
+`AAAA-MM-DD_Tipo_ID_Descricao.ext`, da apostila (*Entregáveis e convenção de
+arquivos*, Orientação **p. 10**). A apostila dá dois exemplos, `Teste` e
+`Defeito`; a lista abaixo é **introduzida aqui** e é fechada:
 
 `Teste` · `Defeito` · `Captura` · `Log` · `Execucao` · `Relatorio` ·
 `Auditoria` · `Matriz`
 
-Examples: `2026-10-05_Teste_CT-014_LoginBloqueado.pdf`,
-`2026-10-06_Defeito_BUG-007_StatusInvalido.png`.
-
 ---
 
-## 6. Unresolved vocabulary (open decisions, not yet law)
+## 6. Vocabulário ainda indefinido (decisões em aberto)
 
-Found while reading the spec. These words are **used by the spec but not
-defined**. Until decided, they are quarantined — do not put them in an
-identifier.
+Palavras usadas pela QTS ou pela apostila e **não definidas** em lugar nenhum.
+Enquanto não forem decididas, ficam em quarentena: não entram em identificador.
 
-| Word | Where the spec uses it | Problem | Status |
+| Palavra | Onde aparece | Problema | Situação |
 |---|---|---|---|
-| **queue** / *fila* | RF06, Passo 12, Passo 44 R4/R5, Passo 3 | "Technician sees the authorised queue", but no queue table or column exists in Passo 19/26. | open — decide before `detail` |
-| **owner** vs **requester** | Passo 19 lists `owner_id`; Passo 26's migration omits it | RF08 requires history when the assignee changes, so the column must exist. | open — needed before `detail` |
-| **delete** | RF07 "only admin may delete, with justification and audit" | Passo 20 has no `DELETE` route. Passo 12 asks: physical, logical, or auditable archiving? | open |
-| **reopen** | Passo 29 allows `resolved → in_progress` for any authorised caller; Passo 12 asks who may reopen and within what deadline | Undecided rule vs. shipped code sample. | open |
-| **"common user"** | Orientation p. 6, RF06 | Same role as `requester` (seed uses `requester`). Banned; use `requester`. | resolved here |
-| **pagination size / ordering** | Passo 20 says "paginated list"; Passo 48 asserts "paginação e ordenação" | Never specified — not a page size, a default order, nor a tiebreaker. | open |
-| **correlation id format** | Passo 20/33 sample `req_7f31…`; Passo 27 code sets a raw `crypto.randomUUID()` | Two formats. | open — pick one, record the choice |
+| **fila / queue** | QTS "Lista de chamados"; apostila RF06 e Passo 44 R4/R5 | O técnico "visualiza a fila para a qual possui autorização", mas não existe tabela nem coluna de fila em nenhum dos dois documentos | **aberto — bloqueia a tela Detalhe** |
+| **responsável técnico (owner)** | apostila RF08 e Passo 19 | A apostila exige histórico quando o responsável muda; a QTS **não menciona responsável**, e sua lista de migrações é "usuários, chamados, comentários, histórico e categorias" — sem responsável e sem fila | **aberto — os dois documentos divergem** |
+| **categoria** | QTS, migrações e perfil Administrador | Entidade nova que **não existe** na apostila. Ninguém é dono dela, e nenhuma tela da QTS lista "categoria" como campo | **aberto** |
+| **exclusão de chamado** | apostila RF07 | A QTS **não menciona** exclusão; o perfil Administrador fala em permissões e categorias | **aberto — pode ter saído do escopo** |
+| **endpoint de comentários** | QTS, tela Detalhe ("adicionar comentários") e migrações | A QTS só nomeia `/api/reports/summary`. Não há rota de comentário especificada em nenhum dos dois documentos | **aberto — bloqueia a tela Detalhe** |
+| **rota de login** | a QTS não nomeia nenhuma · apostila: `POST /api/sessions` · plano em `thoughts/` e comentário TODO no mock: `POST /api/auth/login` | Duas rotas candidatas, nenhuma travada | **aberto — travar uma** |
+| **paginação e ordenação** | QTS "navegar pelos resultados"; apostila Passo 48 | Nunca especificados: nem tamanho de página, nem ordem padrão, nem desempate | **aberto — bloqueia a tela Lista** |
+| **formato do `correlationId`** | apostila Passo 20/33 (`req_7f31…`) vs. Passo 27 (`crypto.randomUUID()`) | Dois formatos | **aberto** |
 
 ---
 
-## 7. Writing rules that keep the vocabulary honest
+## 7. Regras de escrita que mantêm o vocabulário honesto
 
-- **Name a test after behaviour, not mechanism**. Passo 35's own example is
-  `permite resolved -> closed com comentário` — never `test assertTransition 2`.
-- **A doc title names the artefact**, not the activity:
-  `ticket-status-transitions` over "status stuff".
-- **Prose may translate; identifiers may not.** If a sentence needs an English
-  word to make sense in an English doc, use the canonical term — the canonical
-  terms survive translation, synonyms do not.
-- **New noun? New entry.** Adding "board", "task", "issue" or "attachment" to
-  the codebase requires an entry here first, with its banned list. (Spec scope
-  control, Step 8: attachments, chat and real notifications are *Won't now*.)
+- **Nomeie o teste pelo comportamento**, não pelo mecanismo. Exemplo da
+  apostila (Passo 35): `permite resolved -> closed com comentário`.
+- **O título do documento nomeia o artefato**, não a atividade.
+- **Prosa pode traduzir; identificador não.** N substantivo novo entra no
+  código sem entrada aqui antes.
 
 ---
 
-## Related
+## Relacionados
 
-- [[project/team-and-screens]] — who is responsible for what, and the convention
-- [[reference/spec-map]] — the indexed spec, and the gaps behind §6
-- [[reference/known-issues]] — status of each open decision
-- [[decisions/decision-log]] — where the vocabulary rules were locked
+- [[project/team-and-screens]] — quem responde por quê e a convenção de
+  endereçamento
+- [[reference/spec-map]] — a QTS e a apostila indexadas, e as lacunas por trás
+  de §6
+- [[reference/known-issues]] — situação de cada decisão em aberto
+- [[decisions/decision-log]] — onde as decisões são travadas

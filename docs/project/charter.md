@@ -1,58 +1,102 @@
 ---
-title: Project charter
-updated: 2026-10-02
-type: project
-tags: [project, charter]
+title: Documento de abertura do projeto
+type: projeto
+updated: 2026-10-09
+tags: [projeto, abertura, escopo, objetivo]
 ---
 
-# Project charter
+# Documento de abertura do projeto
 
-## Mission
+## Missão
 
-Build a working, good-looking helpdesk application for the school assignment
-due **Oct 9th**. The rubric's heaviest weights are **implementation (20%)**
-and **test techniques (20%)**, with **no appearance line item** (see
-[[reference/spec-map]] §1). Looks decide how the live demo reads, not the
-score — so the app must run end to end (boot, routes respond, data persists,
-no dead screens) *and* look finished.
+Construir o sistema de Help Desk do Colégio Bento Quirino descrito na
+`Documentação QTS - HelpDesk.pdf`: uma aplicação web que integra professores e
+a equipe de TI, organiza chamados por urgência e registra histórico suficiente
+para gerar dados. **Entrega: 9 de outubro.**
 
-## Goals
+A pergunta de decisão da disciplina é: *"A versão do sistema HelpDesk BQ possui
+qualidade suficiente para entrar em produção?"* (apostila, Orientação p. 6).
 
-- Complete core flows working: login → open → triage → handle → close →
-  report. The assignment contract is extracted in [[reference/spec-map]] §3 —
-  five screens, RF01–RF15, RNF01–RNF08, the Step 20 API contract, the Passo 19
-  data model.
-- Every screen visually coherent: one shell, one header/nav, consistent
-  cards/tables/buttons/forms/state panels.
-- Every screen truthful: loading/empty/error states, no invented numbers, no
-  blank failures.
-- Small approved pattern set, reused — not reinvented per screen.
-- The five screens are owned one-per-collaborator and verifiable against the
-  checklist in [[project/team-and-screens]] §2.
+## Problema
 
-## Non-goals
+Sem Help Desk, três coisas acumulam (QTS, "Descrição do problema"):
 
-- **We do not follow the PDF's process.** Two groups, rotating roles, meeting
-  cadence, double-signed gates, printable evidence sheets — all dropped. See
-  [[reference/spec-map]] §3.4 for the line.
-- No exhaustive feature matrix; completeness of the required flows beats
-  breadth.
-- No global redesigns mid-sprint once the visual language locks.
-- No fake data in the shipped app (the Passo 34 seed is deterministic and
-  labelled as seed).
-- No production hardening beyond the assignment (no deploy pipeline, no
-  multi-env ops).
+1. **Desorganização na priorização** — a equipe atende sem ordem clara, e uma
+   falha trivial pode passar na frente de uma crucial. As aulas são impactadas:
+   o docente não sabe se nem em quanto tempo será atendido.
+2. **Falta de registros formais** — ninguém sabe quantos problemas existem, o
+   que foi resolvido e o que foi esquecido. Sem dado não há padrão, e a correção
+   é do sintoma, não da causa. A equipe gestora fica sem base para dimensionar
+   equipe ou decidir compras.
+3. **Sobrecarga da TI** — pedidos informais fragmentam o trabalho e quase não
+   sobra tempo para manutenção preventiva e melhorias.
 
-## Baseline
+## Objetivos
 
-Repo skeleton at scaffold time: Express stubs (`src/app.js`, `src/server.js`),
-empty `routes/`/`controllers/`/`services/`/`repositories/`, empty
-`middlewares/`, `db/migrations/`, empty `public/`, empty `tests/`. The
-visual language is not yet established — establishing it early is the
-highest-leverage design task.
+- **Fluxo principal funcionando:** login → abrir → priorizar → atender →
+  fechar → reportar.
+- **As cinco telas** da QTS, cada uma com seus estados e seu estado alternativo:
+  Login, Lista, Novo chamado, Detalhe, Dashboard.
+- **Toda tela coerente:** uma estrutura, um cabeçalho/navegação, cartões,
+  tabelas, botões, formulários e painéis de estado consistentes.
+- **Toda tela honesta:** estados de carregando, vazio e erro. Nenhum número
+  inventado, nenhuma tela em branco por falha.
+- **Padrão pequeno e reaproveitado** — não reinventado por tela.
+- **Decisão de release sustentada por evidência**, não por opinião.
 
-## Deliverable standard
+## Não objetivos
 
-A UI batch commits only after: checks pass, `code-reviewer` PASS, and a
-visual PASS (rendered inspection or user verdict). A passing smoke test is
-not visual approval.
+- **Não seguimos o processo da apostila.** Dois grupos, papéis rotativos,
+  cadência de encontros, gates com dupla assinatura, comitê de release: fora.
+  A QTS é o nosso documento; ver [[decisions/decision-log]].
+- Sem matriz de funcionalidades exaustiva. Completar o fluxo é mais importante
+  que amplitude.
+- Sem redesenho global no meio da sprint, depois que a linguagem visual travar.
+- Sem dados fictícios vendidos como reais — seed determinístico e rotulado
+  como seed é bem-vindo.
+- Sem endurecimento de produção além do escopo: sem pipeline de deploy, sem
+  operação multi-ambiente.
+
+## Restrições técnicas
+
+Vindas da QTS, que é a fonte da verdade do produto:
+
+- **JavaScript / Node.js** no back, **Express**.
+- **Front em HTML, CSS e JavaScript**, servidos pela própria aplicação a partir
+  de `public/`. A QTS justifica: *"A escolha por uma única linguagem nas duas
+  pontas simplifica a comunicação entre as equipes e reduz a curva de
+  aprendizado do grupo."*
+- **PostgreSQL**, com migrações em `db/migrations/`.
+- **JWT** para sessão, **bcrypt** para senhas.
+- **Jest e Supertest** para testes.
+- **Git e GitHub**, branches próprias, integração por pull request.
+
+## Linha de base
+
+No momento da reindexação (2026-10-09):
+
+- **Back:** esqueleto. `src/app.js` e `src/server.js` são comentários;
+  `src/routes/authRoutes.js`, `src/controllers/authController.js`,
+  `src/services/authService.js` e `middlewares/authMiddleware.js` existem como
+  placeholders. **Sem `package.json` na raiz, sem dependências, sem banco.**
+- **Front em `public/`:** tela de Login completa em HTML/CSS/JS, com mock do
+  fluxo autenticado e um comentário `TODO(back)` com o `fetch` sugerido.
+- **`frontend/`:** projeto React 19 + Vite, também com a tela de Login. Conflita
+  com a stack da QTS — ver [[reference/specification]] §8.1, em decisão.
+- **`docs/`:** este vault.
+- **Banco:** nada. `db/migrations/` só tem `.gitkeep`.
+
+## Padrão de entrega
+
+Um lote de interface só é commitado depois de: verificações passando,
+`code-reviewer` com PASS e **PASS visual** (inspeção da tela renderizada ou
+veredito do usuário na rota exata). Um smoke test passando não é aprovação
+visual.
+
+## Relacionados
+
+- [[reference/specification]] — a QTS reorganizada
+- [[project/team-and-screens]] — as telas e seus responsáveis
+- [[project/boundaries]] — o que pode ser tocado
+- [[reference/spec-map]] — a apostila e a rubrica
+- [[reference/known-issues]] — lacunas em aberto
