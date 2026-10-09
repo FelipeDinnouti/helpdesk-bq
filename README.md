@@ -8,9 +8,9 @@ declarada e as decisões de arquitetura estão em [`docs/`](docs/README.md).
 
 ## Stack
 
-JavaScript / Node.js · Express · **HTML, CSS e JavaScript servidos de
-`public/`** · PostgreSQL com migrações em `db/migrations/` · JWT para sessão e
-bcrypt para senhas · Jest e Supertest.
+JavaScript / Node.js · Express · **React 19 + Vite (`frontend/`)** · SQLite em
+arquivo com schema portátil (Postgres é o alvo), migrações em `db/migrations/`
+· JWT para sessão e bcrypt para senhas · Jest e Supertest.
 
 Fluxo: `Interface web → Rotas → Controllers → Services → Repositories → Banco`.
 
@@ -22,7 +22,7 @@ cp .env.example .env      # ajustar JWT_SECRET
 npm run migrate           # cria o schema
 npm run seed              # carga de demonstração (3 usuários + 12 chamados)
 npm run dev               # back com recarga em http://localhost:3001
-npm test                  # 41 testes (Jest + Supertest)
+npm test                  # 42 testes (Jest + Supertest)
 ```
 
 Front em outro terminal:
@@ -71,5 +71,5 @@ O contrato completo está em [`docs/reference/glossary.md`](docs/reference/gloss
 ## Estado atual
 
 Aplicação completa: API Express com auth JWT, chamados, transições, comentários,
-histórico, relatórios e admin; front React com as cinco telas; 41 testes verdes.
+histórico, relatórios e admin; front React com as cinco telas; 42 testes verdes.
 Decisões e lacunas em [`docs/reference/known-issues.md`](docs/reference/known-issues.md).
